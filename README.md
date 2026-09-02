@@ -42,7 +42,7 @@ results/                    όλα τα παραγόμενα αποτελέσμ�
 | 3. Φάσμα πλάτους FFT αρχικής & υποβαθμισμένης | `src/frequency_filters.py` | `results/stage3_fft/` |
 | 4. Gauss (≥2 πυρήνες), Median (≥2 παράθυρα), bilateral + PSNR/SSIM | `src/spatial_filters.py` | `results/stage4_spatial/` |
 | 5. Butterworth (**≥2 τάξεις n**) & Gauss ΧΠΦ, πυρήνες + PSNR/SSIM | `src/frequency_filters.py` | `results/stage5_frequency/` |
-| 6. HE + CLAHE (≥2 clipLimit) + ιστογράμματα πριν/μετά | `src/enhancement.py` | `results/stage6_enhancement/` |
+| 6. HE + CLAHE (≥2 clipLimit) **στις αποθορυβοποιημένες** + ιστογράμματα πριν/μετά | `src/enhancement.py` | `results/stage6_enhancement/` |
 | 7. Sobel (οριζόντιος/κατακόρυφος/συνδυασμένος) & Canny (≥2 κατώφλια) **στην αποκατεστημένη** | `src/edges.py` | `results/stage7_edges/` |
 | 8. Συγκεντρωτικός πίνακας PSNR/SSIM ανά βήμα | `run_stage8()` | `results/stage8_summary/pipeline_summary.csv` |
 

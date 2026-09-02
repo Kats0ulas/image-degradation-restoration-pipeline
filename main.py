@@ -409,7 +409,7 @@ def run_stage6():
     out = io_utils.ensure_dir(config.STAGE_DIRS[6])
 
     refs = io_utils.load_all_references()
-    rows, chain_rows = [], []
+    rows, chain_rows, denoised_rows = [], [], []
 
     for key, (spec, ref) in refs.items():
         print(f"\n  [{spec['label']}]")
@@ -490,6 +490,43 @@ def run_stage6():
                       suptitle=f"Σειρά στην αλυσίδα: βελτίωση ΠΡΙΝ vs ΜΕΤΑ την "
                                f"αποκατάσταση — {spec['label']} — {vspec['short']}")
 
+        # Μέρος Γ: όλες οι τεχνικές πάνω στην ΑΠΟΚΑΤΕΣΤΗΜΕΝΗ (αποθορυβοποιημένη)
+        # εικόνα — το ζητούμενο του σταδίου. Η σάρωση του clipLimit και τα
+        # ιστογράμματα πριν/μετά γίνονται εδώ, όχι μόνο στην καθαρή εικόνα.
+        p0 = enhancement.profile(restored)
+        denoised_rows.append([spec["label"], vspec["short"], rspec["short"],
+                              "Χωρίς βελτίωση", p0["mean"], p0["std"],
+                              p0["entropy"], p0["used_pct"], rm["psnr"], rm["ssim"]])
+        print(f"\n    Βελτίωση της αποκατεστημένης ({rspec['short']}):")
+        print(f"      {'Χωρίς βελτίωση':<28s} std={p0['std']:6.2f}  "
+              f"εντροπία={p0['entropy']:.3f}  επίπεδα σε χρήση={p0['used_pct']:5.1f}%")
+
+        den_items = [(restored, f"Αποκατεστημένη\n{rspec['short']}\n"
+                                f"std={p0['std']:.1f} · H={p0['entropy']:.2f} bits")]
+        den_hist = [(restored, "Αποκατεστημένη (πριν)")]
+        for mspec in enhancement.method_specs():
+            eimg = mspec["fn"](restored)
+            io_utils.save_image(eimg, out / f"{key}_restored_{mspec['key']}.png")
+            p = enhancement.profile(eimg)
+            m = metrics.evaluate(ref, eimg)
+            denoised_rows.append([spec["label"], vspec["short"], rspec["short"],
+                                  mspec["short"], p["mean"], p["std"],
+                                  p["entropy"], p["used_pct"], m["psnr"], m["ssim"]])
+            print(f"      {mspec['short']:<28s} std={p['std']:6.2f}  "
+                  f"εντροπία={p['entropy']:.3f}  επίπεδα σε χρήση={p['used_pct']:5.1f}%")
+            den_items.append((eimg, f"{mspec['short']}\nstd={p['std']:.1f} · "
+                                    f"H={p['entropy']:.2f} bits\nεπίπεδα {p['used_pct']:.0f}%"))
+            if mspec["key"] != "stretch":      # η εκφώνηση ζητά HE και CLAHE
+                den_hist.append((eimg, mspec["short"]))
+
+        viz.plot_grid(den_items, out / f"{key}_restored_methods.png", ncols=4,
+                      figsize_per=(3.3, 4.1),
+                      suptitle=f"Βελτίωση της αποθορυβοποιημένης εικόνας — "
+                               f"{spec['label']} — {vspec['short']} → {rspec['short']}")
+        viz.plot_hist_row(den_hist, out / f"{key}_restored_hist.png",
+                          suptitle=f"Ιστογράμματα πριν/μετά τη βελτίωση της "
+                                   f"αποθορυβοποιημένης εικόνας — {spec['label']}")
+
     headers = ["Εικόνα", "Τεχνική", "Μέση τιμή", "Τυπ. απόκλιση (αντίθεση)",
                "Εντροπία (bits)", "Επίπεδα σε χρήση (%)", "SSIM ως προς αναφορά"]
     tables.save(headers, rows, out / "enhancement_metrics",
@@ -501,6 +538,14 @@ def run_stage6():
     tables.save(chain_headers, chain_rows, out / "enhancement_chain",
                 title="Επίδραση της σειράς: βελτίωση πριν vs μετά την αποκατάσταση")
     print("\n" + tables.render(chain_headers, chain_rows))
+
+    den_headers = ["Εικόνα", "Υποβάθμιση", "Αποκατάσταση", "Τεχνική βελτίωσης",
+                   "Μέση τιμή", "Τυπ. απόκλιση (αντίθεση)", "Εντροπία (bits)",
+                   "Επίπεδα σε χρήση (%)", "PSNR (dB)", "SSIM"]
+    tables.save(den_headers, denoised_rows, out / "enhancement_denoised",
+                title="Βελτίωση των αποθορυβοποιημένων εικόνων "
+                      "(HE και CLAHE για κάθε clipLimit)")
+    print("\n" + tables.render(den_headers, denoised_rows))
     print(f"\n  → αποτελέσματα: {out}")
 
 
