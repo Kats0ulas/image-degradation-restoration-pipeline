@@ -28,7 +28,7 @@ def psnr(ref, test, data_range: float = 255.0) -> float:
 
 
 def ssim(ref, test) -> float:
-    """SSIM με τις τυπικές παραμέτρους (παράθυρο Gauss 11x11, σ=1.5)."""
+    """SSIM με τις προεπιλογές του skimage (ομοιόμορφο παράθυρο 7×7)."""
     return float(structural_similarity(to_uint8(ref), to_uint8(test), data_range=255))
 
 
