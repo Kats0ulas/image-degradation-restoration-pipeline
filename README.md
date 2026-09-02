@@ -32,7 +32,24 @@ tools/
   preview_candidates.py     βοηθητικό: προεπισκόπηση υποψήφιων εικόνων αναφοράς
 images/                     οι εικόνες αναφοράς (ground truth, PNG)
 results/                    όλα τα παραγόμενα αποτελέσματα ανά στάδιο
+report/
+  stage_notes.md            αναλυτικές σημειώσεις ανά στάδιο (τι έγινε, γιατί, τι δείχνουν τα νούμερα)
+  anafora.md                πηγή της τελικής αναφοράς (Markdown)
+  anafora.html              η αναφορά σε HTML (ενδιάμεσο)
+  anafora.pdf               η τελική αναφορά — ΤΟ ΠΑΡΑΔΟΤΕΟ
+  figs/                     υποδειγματοληπτημένα αντίγραφα των εικόνων για το PDF
+tools/
+  build_report.py           anafora.md -> anafora.html -> anafora.pdf
 ```
+
+## Παραγωγή της αναφοράς
+```
+python tools/build_report.py          # HTML + PDF (headless Chrome/Edge)
+python tools/build_report.py --html   # μόνο HTML
+```
+Δεν χρειάζεται LaTeX ή pandoc: το PDF παράγεται με `--print-to-pdf` του Chrome/Edge.
+Για αρίθμηση σελίδων, άνοιξε το `report/anafora.html` στον browser και τύπωσε σε PDF
+(Ctrl+P) με ενεργή την επιλογή «Κεφαλίδες και υποσέλιδα».
 
 ## Αντιστοίχιση με την εκφώνηση
 | Ζητούμενο | Πού υλοποιείται | Έξοδος |
@@ -60,3 +77,4 @@ results/                    όλα τα παραγόμενα αποτελέσμ�
 - [x] 6. Βελτίωση εικόνας
 - [x] 7. Ανίχνευση ακμών
 - [x] 8. Συγκεντρωτική αξιολόγηση
+- [x] Τελική αναφορά (`report/anafora.pdf`)
