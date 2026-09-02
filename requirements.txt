@@ -4,7 +4,3 @@ numpy>=1.26
 opencv-python>=4.9
 matplotlib>=3.8
 scikit-image>=0.22
-
-# Μόνο για την παραγωγή της αναφοράς (tools/build_report.py)
-markdown>=3.5
-pillow>=10.0

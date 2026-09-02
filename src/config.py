@@ -8,7 +8,6 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 IMAGES_DIR = ROOT / "images"
 RESULTS_DIR = ROOT / "results"
-REPORT_DIR = ROOT / "report"
 
 STAGE_DIRS = {
     1: RESULTS_DIR / "stage1_reference",
