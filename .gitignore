@@ -1,3 +1,8 @@
 __pycache__/
 *.pyc
 report/
+
+# Το build_report.py αφαιρέθηκε επίτηδες από το repo (d39c9fd) μαζί με το
+# report/. Το τοπικό αντίγραφο μένει για να παράγεται η αναφορά, αλλά δεν
+# ξαναμπαίνει στο git. Επαναφορά: git show 2a13989:tools/build_report.py
+tools/build_report.py
