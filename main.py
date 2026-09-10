@@ -31,14 +31,15 @@ def image_stats(img):
     gx = cv2.Sobel(f, cv2.CV_64F, 1, 0, ksize=3)
     gy = cv2.Sobel(f, cv2.CV_64F, 0, 1, ksize=3)
     grad = np.sqrt(gx ** 2 + gy ** 2)
-    edges = cv2.Canny(img, 100, 200)
+    # Όχι "edges": θα σκίαζε το ομώνυμο module που εισάγεται στην κορυφή.
+    edge_map = cv2.Canny(img, 100, 200)
     return {
         "mean": float(f.mean()),
         "std": float(f.std()),
         "min": int(img.min()),
         "max": int(img.max()),
         "mean_grad": float(grad.mean()),
-        "edge_pct": float((edges > 0).mean() * 100.0),
+        "edge_pct": float((edge_map > 0).mean() * 100.0),
     }
 
 
@@ -335,8 +336,9 @@ def run_stage5():
             results = {}
             for fam in freq.LPF_BUILDERS:
                 res = []
-                for d0 in config.LPF_CUTOFFS:
-                    filt = freq.lowpass(noisy, fam, d0)
+                # Ένας ευθύς DFT για όλη τη σάρωση αποκοπών της οικογένειας.
+                for d0, filt in zip(config.LPF_CUTOFFS,
+                                    freq.lowpass_many(noisy, fam, config.LPF_CUTOFFS)):
                     m = metrics.evaluate(ref, filt)
                     sh = spatial.sharpness(filt) / ref_sharp * 100.0
                     res.append((d0, filt, m, sh))
@@ -732,10 +734,12 @@ def _all_restorations(ref, noisy):
         res.append({"domain": "Χωρικό", "family": spatial.FAMILY_LABEL[fspec["family"]],
                     "name": fspec["short"], "image": filt})
     for fam in freq.LPF_BUILDERS:
-        for d0 in config.LPF_CUTOFFS:
+        # Ένας ευθύς DFT για όλη τη σάρωση αποκοπών της οικογένειας.
+        for d0, filt in zip(config.LPF_CUTOFFS,
+                            freq.lowpass_many(noisy, fam, config.LPF_CUTOFFS)):
             res.append({"domain": "Συχνοτήτων", "family": freq.LPF_LABEL[fam],
                         "name": f"{freq.LPF_LABEL[fam]} D0={d0:g}",
-                        "image": freq.lowpass(noisy, fam, d0)})
+                        "image": filt})
     for r in res:
         r.update(metrics.evaluate(ref, r["image"]))
     return res
@@ -749,6 +753,13 @@ def run_stage8():
     overall_rows, family_rows, chain_rows, extra_rows = [], [], [], []
     # Για το ραβδόγραμμα: PSNR του καλύτερου εκπροσώπου κάθε οικογένειας.
     case_labels, family_best = [], {}
+    # Ποιες περιπτώσεις μπαίνουν στην εικόνα της πλήρους αλυσίδας: η ΙΣΧΥΡΟΤΕΡΗ
+    # υποβάθμιση κάθε τύπου θορύβου, επιλεγμένη με κανόνα και όχι με σταθερά
+    # κλειδιά. Με σταθερά κλειδιά, μια αλλαγή στο config άφηνε το pipeline_items
+    # άδειο και το plot_grid έσκαγε. (Με το τρέχον config: gauss_s25, sp_d10.)
+    showcase = {s["kind"]: s["key"]
+                for s in sorted(degradation.variant_specs(),
+                                key=lambda s: s["param"])}
 
     for key, (spec, ref) in refs.items():
         ref_sharp = spatial.sharpness(ref)
@@ -825,7 +836,7 @@ def run_stage8():
             io_utils.save_image(restored, out / f"{key}_{vspec['key']}_best.png")
             io_utils.save_image(enhanced, out / f"{key}_{vspec['key']}_enhanced.png")
 
-            if vspec["key"] in ("gauss_s25", "sp_d10"):
+            if vspec["key"] in showcase.values():
                 pipeline_items += [
                     (ref, "1. Αναφορά"),
                     (noisy, f"2. Υποβάθμιση\n{vspec['short']}\nPSNR={base['psnr']:.1f} dB"),
