@@ -9,6 +9,8 @@
 βρίσκεται στο κέντρο του πίνακα. Οι ακτίνες κανονικοποιούνται στη συχνότητα
 Nyquist: r=0 -> DC, r=1 -> η υψηλότερη συχνότητα κατά τους άξονες.
 """
+from functools import lru_cache
+
 import numpy as np
 
 from . import config
@@ -45,14 +47,29 @@ def log_spectrum_image(F) -> np.ndarray:
     return to_uint8((s - lo) / (hi - lo) * 255.0)
 
 
-def radius_grid(shape) -> np.ndarray:
-    """Απόσταση από το κέντρο (DC), κανονικοποιημένη: r = 1 στο Nyquist."""
-    h, w = shape[:2]
+@lru_cache(maxsize=8)
+def _radius_grid_cached(h: int, w: int) -> np.ndarray:
+    """
+    Ο πίνακας ακτίνων για δοσμένες διαστάσεις. Εξαρτάται μόνο από το (h, w),
+    οπότε υπολογίζεται μία φορά και επαναχρησιμοποιείται: σε μια πλήρη εκτέλεση
+    ζητείται εκατοντάδες φορές (φίλτρα, ακτινικά προφίλ, ενέργεια φάσματος).
+
+    Ο πίνακας επιστρέφεται read-only, επειδή τον μοιράζονται όλοι οι καλούντες:
+    έτσι μια μελλοντική κατά λάθος τροποποίηση χτυπάει αμέσως, αντί να αλλοιώσει
+    σιωπηλά τα αποτελέσματα κάθε επόμενης κλήσης.
+    """
     v = np.arange(h) - h // 2
     u = np.arange(w) - w // 2
     rr, cc = np.meshgrid(v, u, indexing="ij")
-    r = np.sqrt(rr ** 2 + cc ** 2)
-    return r / (min(h, w) / 2.0)
+    r = np.sqrt(rr ** 2 + cc ** 2) / (min(h, w) / 2.0)
+    r.flags.writeable = False
+    return r
+
+
+def radius_grid(shape) -> np.ndarray:
+    """Απόσταση από το κέντρο (DC), κανονικοποιημένη: r = 1 στο Nyquist."""
+    h, w = shape[:2]
+    return _radius_grid_cached(int(h), int(w))
 
 
 def radial_power_profile(F, nbins=128):
@@ -197,10 +214,24 @@ LPF_LABEL["gaussian"] = "Γκαουσιανό ΧΠΦ"
 LPF_ORDER = {k: getattr(b, "order", None) for k, b in LPF_BUILDERS.items()}
 
 
+def lowpass_many(img, family, cutoffs) -> list:
+    """
+    Το ίδιο φίλτρο για πολλές συχνότητες αποκοπής, με ΕΝΑΝ μόνο ευθύ DFT.
+
+    Ο ευθύς μετασχηματισμός F δεν εξαρτάται από το D0: αλλάζει μόνο η συνάρτηση
+    μεταφοράς H. Η σάρωση των Σταδίων 5 και 8 δοκιμάζει 9 συχνότητες αποκοπής
+    ανά οικογένεια, οπότε ο υπολογισμός του F μία φορά αντί για εννιά γλιτώνει
+    8 στους 9 ευθείς μετασχηματισμούς, με αριθμητικά ταυτόσημο αποτέλεσμα.
+    """
+    F = fft2c(img)
+    builder = LPF_BUILDERS[family]
+    shape = np.asarray(img).shape
+    return [to_uint8(ifft2c(F * builder(shape, d0))) for d0 in cutoffs]
+
+
 def lowpass(img, family, d0) -> np.ndarray:
     """Εφαρμογή χαμηλοπερατού φίλτρου της δοσμένης οικογένειας."""
-    H = LPF_BUILDERS[family](img.shape, d0)
-    return apply_transfer(img, H)
+    return lowpass_many(img, family, (d0,))[0]
 
 
 def radial_transfer_profile(H, nbins=128):

@@ -56,7 +56,12 @@ def plot_grid(items, path, ncols=3, figsize_per=(3.2, 3.4), suptitle=None, cmap=
     """
     Πλέγμα εικόνων.  items = λίστα από (image, title).
     """
+    items = list(items)
     n = len(items)
+    if n == 0:
+        # Χωρίς αυτόν τον έλεγχο το ncols γίνεται 0 και σκάει ZeroDivisionError
+        # στη διαίρεση n/ncols — μήνυμα που δεν λέει τίποτα για την αιτία.
+        raise ValueError(f"plot_grid: δεν δόθηκε καμία εικόνα για το {path}")
     ncols = min(ncols, n)
     nrows = int(np.ceil(n / ncols))
     fig, axes = plt.subplots(nrows, ncols,
@@ -79,7 +84,10 @@ def plot_grid(items, path, ncols=3, figsize_per=(3.2, 3.4), suptitle=None, cmap=
 
 def plot_hist_row(items, path, color="#3b6ea5", suptitle=None):
     """Σειρά ιστογραμμάτων.  items = λίστα από (image, title)."""
+    items = list(items)
     n = len(items)
+    if n == 0:
+        raise ValueError(f"plot_hist_row: δεν δόθηκε καμία εικόνα για το {path}")
     fig, axes = plt.subplots(1, n, figsize=(4.0 * n, 3.0), squeeze=False)
     for ax, (img, title) in zip(axes[0], items):
         ax.bar(np.arange(256), histogram(img), width=1.0, color=color)
