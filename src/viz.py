@@ -1,6 +1,6 @@
 """
-Γραφήματα: ιστογράμματα, πλέγματα εικόνων, αποθήκευση figures.
-Χρησιμοποιείται backend "Agg" (χωρίς παράθυρο) ώστε να τρέχει και σε server.
+Plots: histograms, image grids, saving figures.
+The "Agg" backend (no window) is used so that it also runs on a server.
 """
 from pathlib import Path
 
@@ -12,7 +12,8 @@ import numpy as np
 from . import config
 from .io_utils import ensure_dir
 
-# Η DejaVu Sans (default της matplotlib) καλύπτει πλήρως ελληνικούς χαρακτήρες.
+# DejaVu Sans (the matplotlib default) fully covers the math symbols used in
+# the labels (σ, Δ, ∇).
 plt.rcParams.update({
     "figure.dpi": config.FIG_DPI,
     "savefig.dpi": config.FIG_DPI,
@@ -31,12 +32,12 @@ def save_fig(fig, path) -> Path:
 
 
 def histogram(img) -> np.ndarray:
-    """Ιστόγραμμα 256 bins μιας 8-bit grayscale εικόνας."""
+    """256-bin histogram of an 8-bit grayscale image."""
     return np.bincount(np.asarray(img, dtype=np.uint8).ravel(), minlength=256)
 
 
 def plot_image_with_hist(img, title, path, hist_color="#3b6ea5"):
-    """Μία εικόνα δίπλα στο ιστόγραμμά της."""
+    """An image next to its histogram."""
     fig, axes = plt.subplots(1, 2, figsize=(9, 3.6))
     axes[0].imshow(img, cmap="gray", vmin=0, vmax=255)
     axes[0].set_title(title)
@@ -45,23 +46,23 @@ def plot_image_with_hist(img, title, path, hist_color="#3b6ea5"):
     h = histogram(img)
     axes[1].bar(np.arange(256), h, width=1.0, color=hist_color)
     axes[1].set_xlim(0, 255)
-    axes[1].set_title("Ιστόγραμμα έντασης")
-    axes[1].set_xlabel("Επίπεδο γκρι")
-    axes[1].set_ylabel("Πλήθος pixel")
+    axes[1].set_title("Intensity histogram")
+    axes[1].set_xlabel("Gray level")
+    axes[1].set_ylabel("Pixel count")
     fig.tight_layout()
     return save_fig(fig, path)
 
 
 def plot_grid(items, path, ncols=3, figsize_per=(3.2, 3.4), suptitle=None, cmap="gray"):
     """
-    Πλέγμα εικόνων.  items = λίστα από (image, title).
+    Image grid.  items = list of (image, title).
     """
     items = list(items)
     n = len(items)
     if n == 0:
-        # Χωρίς αυτόν τον έλεγχο το ncols γίνεται 0 και σκάει ZeroDivisionError
-        # στη διαίρεση n/ncols — μήνυμα που δεν λέει τίποτα για την αιτία.
-        raise ValueError(f"plot_grid: δεν δόθηκε καμία εικόνα για το {path}")
+        # Without this check ncols becomes 0 and a ZeroDivisionError is raised
+        # in n/ncols — a message that says nothing about the cause.
+        raise ValueError(f"plot_grid: no images were given for {path}")
     ncols = min(ncols, n)
     nrows = int(np.ceil(n / ncols))
     fig, axes = plt.subplots(nrows, ncols,
@@ -83,18 +84,18 @@ def plot_grid(items, path, ncols=3, figsize_per=(3.2, 3.4), suptitle=None, cmap=
 
 
 def plot_hist_row(items, path, color="#3b6ea5", suptitle=None):
-    """Σειρά ιστογραμμάτων.  items = λίστα από (image, title)."""
+    """A row of histograms.  items = list of (image, title)."""
     items = list(items)
     n = len(items)
     if n == 0:
-        raise ValueError(f"plot_hist_row: δεν δόθηκε καμία εικόνα για το {path}")
+        raise ValueError(f"plot_hist_row: no images were given for {path}")
     fig, axes = plt.subplots(1, n, figsize=(4.0 * n, 3.0), squeeze=False)
     for ax, (img, title) in zip(axes[0], items):
         ax.bar(np.arange(256), histogram(img), width=1.0, color=color)
         ax.set_xlim(0, 255)
         ax.set_title(title)
-        ax.set_xlabel("Επίπεδο γκρι")
-    axes[0][0].set_ylabel("Πλήθος pixel")
+        ax.set_xlabel("Gray level")
+    axes[0][0].set_ylabel("Pixel count")
     if suptitle:
         fig.suptitle(suptitle, fontsize=12)
     fig.tight_layout()
@@ -105,9 +106,9 @@ def plot_curves(curves, path, xlabel, ylabel, title=None, logy=False,
                 figsize=(7.0, 4.2), xlim=None, hlines=None, vlines=None,
                 markers=False):
     """
-    Γράφημα καμπυλών.  curves = λίστα από (x, y, label).
-    logy=True για λογαριθμικό άξονα y (φάσματα ισχύος).
-    hlines / vlines = λίστες από (τιμή, label) για γραμμές αναφοράς.
+    Curve plot.  curves = list of (x, y, label).
+    logy=True for a logarithmic y axis (power spectra).
+    hlines / vlines = lists of (value, label) for reference lines.
     """
     fig, ax = plt.subplots(figsize=figsize)
     for x, y, label in curves:
@@ -139,9 +140,9 @@ def plot_curves(curves, path, xlabel, ylabel, title=None, logy=False,
 def plot_bars(categories, series, path, ylabel, title=None, figsize=(9.5, 4.6),
               hline=None, value_fmt="{:.1f}", ymin=None):
     """
-    Ομαδοποιημένο ραβδόγραμμα.
-      categories : ετικέτες του άξονα x (π.χ. οι περιπτώσεις υποβάθμισης)
-      series     : λίστα από (label, values) — μία ράβδος ανά ομάδα
+    Grouped bar chart.
+      categories : x-axis labels (e.g. the degradation cases)
+      series     : list of (label, values) — one bar per group
     """
     n_cat = len(categories)
     n_ser = len(series)
@@ -163,7 +164,7 @@ def plot_bars(categories, series, path, ylabel, title=None, figsize=(9.5, 4.6),
     ax.grid(axis="y", alpha=0.3, linewidth=0.6)
     ax.set_axisbelow(True)
     if ymin is not None:
-        # Ο άξονας δεν ξεκινά από το 0, αλλιώς οι διαφορές των λίγων dB χάνονται.
+        # The axis does not start at 0, otherwise differences of a few dB get lost.
         top = max(max(v) for _, v in series)
         ax.set_ylim(ymin, top + (top - ymin) * 0.16)
     ax.legend(fontsize=8, ncol=min(n_ser, 3), loc="upper center",

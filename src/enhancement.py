@@ -1,15 +1,15 @@
 """
-ΣΤΑΔΙΟ 6 — Βελτίωση εικόνας (ενίσχυση αντίθεσης).
+STAGE 6 — Image enhancement (contrast enhancement).
 
-Τρεις τεχνικές:
-  1. Γραμμική διάταση αντίθεσης — απεικόνιση ενός εύρους εντάσεων στο [0,255].
-  2. Ισοστάθμιση ιστογράμματος (HE) — καθολική, με την CDF ως συνάρτηση
-     μετασχηματισμού.
-  3. CLAHE — τοπική ισοστάθμιση σε πλακίδια, με ψαλίδισμα (clip limit) του
-     τοπικού ιστογράμματος.
+Three techniques:
+  1. Linear contrast stretching — maps a range of intensities onto [0,255].
+  2. Histogram equalization (HE) — global, with the CDF as the transformation
+     function.
+  3. CLAHE — local equalization on tiles, with clipping (clip limit) of the
+     local histogram.
 
-Επειδή η βελτίωση αλλάζει σκόπιμα τις εντάσεις, δεν κρίνεται με PSNR ως προς
-την αναφορά αλλά με αντίθεση, εντροπία και αξιοποίηση των επιπέδων γκρι.
+Because enhancement deliberately changes the intensities, it is not judged by
+PSNR against the reference but by contrast, entropy and gray-level usage.
 """
 import cv2
 import numpy as np
@@ -19,7 +19,7 @@ from .io_utils import to_uint8
 
 
 def contrast_stretch(img, plo=None, phi=None):
-    """Γραμμική διάταση: το [p_lo, p_hi] εκατοστημόριο απεικονίζεται στο [0,255]."""
+    """Linear stretch: the [p_lo, p_hi] percentile range is mapped onto [0,255]."""
     plo = config.STRETCH_PERCENTILES[0] if plo is None else plo
     phi = config.STRETCH_PERCENTILES[1] if phi is None else phi
     f = np.asarray(img, dtype=np.float64)
@@ -30,7 +30,7 @@ def contrast_stretch(img, plo=None, phi=None):
 
 
 def histogram_equalization(img):
-    """Καθολική ισοστάθμιση ιστογράμματος (η CDF ως συνάρτηση μετασχηματισμού)."""
+    """Global histogram equalization (the CDF as the transformation function)."""
     return cv2.equalizeHist(np.asarray(img, dtype=np.uint8))
 
 
@@ -41,11 +41,11 @@ def clahe(img, clip_limit=2.0, tile_grid=(8, 8)):
 
 
 def method_specs():
-    """Οι μέθοδοι που δοκιμάζονται, με σειρά αυξανόμενης πολυπλοκότητας."""
+    """The methods under test, in order of increasing complexity."""
     specs = [
-        {"key": "stretch", "short": "Γραμμική διάταση",
+        {"key": "stretch", "short": "Linear stretch",
          "fn": contrast_stretch},
-        {"key": "he", "short": "Ισοστάθμιση (HE)",
+        {"key": "he", "short": "Equalization (HE)",
          "fn": histogram_equalization},
     ]
     for cl, tg in config.CLAHE_PARAMS:
@@ -58,14 +58,14 @@ def method_specs():
 
 
 def transfer_curve(img) -> np.ndarray:
-    """Η συνάρτηση μετασχηματισμού s = T(r) της HE: κανονικοποιημένη CDF."""
+    """The HE transformation function s = T(r): the normalized CDF."""
     h = np.bincount(np.asarray(img, dtype=np.uint8).ravel(), minlength=256).astype(np.float64)
     cdf = np.cumsum(h)
     return cdf / cdf[-1] * 255.0
 
 
 def entropy(img) -> float:
-    """Εντροπία Shannon του ιστογράμματος (bits/pixel), max = 8 για 8-bit."""
+    """Shannon entropy of the histogram (bits/pixel), max = 8 for 8-bit."""
     h = np.bincount(np.asarray(img, dtype=np.uint8).ravel(), minlength=256).astype(np.float64)
     p = h / h.sum()
     p = p[p > 0]
@@ -73,13 +73,13 @@ def entropy(img) -> float:
 
 
 def used_levels_pct(img) -> float:
-    """Ποσοστό των 256 επιπέδων γκρι που εμφανίζονται πράγματι στην εικόνα."""
+    """Percentage of the 256 gray levels that actually occur in the image."""
     h = np.bincount(np.asarray(img, dtype=np.uint8).ravel(), minlength=256)
     return float((h > 0).mean() * 100.0)
 
 
 def profile(img) -> dict:
-    """Τα μέτρα βελτίωσης μαζί."""
+    """All enhancement measures together."""
     f = np.asarray(img, dtype=np.float64)
     return {
         "mean": float(f.mean()),

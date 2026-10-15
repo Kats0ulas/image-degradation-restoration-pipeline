@@ -1,11 +1,11 @@
-"""ΣΤΑΔΙΟ 4 — Αποθορυβοποίηση στο χωρικό πεδίο"""
+"""STAGE 4 — Denoising in the spatial domain"""
 
 from .. import config, degradation, io_utils, metrics, tables, viz
 from .. import spatial_filters as spatial
 
 
 def run():
-    print("\n=== ΣΤΑΔΙΟ 4: Αποθορυβοποίηση στο χωρικό πεδίο ===")
+    print("\n=== STAGE 4: Denoising in the spatial domain ===")
     out = io_utils.ensure_dir(config.STAGE_DIRS[4])
 
     refs = io_utils.load_all_references()
@@ -13,11 +13,11 @@ def run():
 
     for key, (spec, ref) in refs.items():
         ref_sharp = spatial.sharpness(ref)
-        print(f"\n  [{spec['label']}]  ευκρίνεια αναφοράς (var∇²) = {ref_sharp:.1f}")
+        print(f"\n  [{spec['label']}]  reference sharpness (var∇²) = {ref_sharp:.1f}")
 
         for vspec, noisy in degradation.degrade_all(ref, image_key=key):
             base = metrics.evaluate(ref, noisy)
-            print(f"\n    {vspec['short']}  (πριν: PSNR={base['psnr']:.2f} dB, "
+            print(f"\n    {vspec['short']}  (before: PSNR={base['psnr']:.2f} dB, "
                   f"SSIM={base['ssim']:.4f})")
 
             results = []          # (fspec, filtered, metrics, sharpness%)
@@ -29,10 +29,10 @@ def run():
                                    base["psnr"], m["psnr"], m["psnr"] - base["psnr"],
                                    m["ssim"], m["ssim"] - base["ssim"], sh])
 
-            # Καλύτερη παράμετρος ανά οικογένεια φίλτρου (κριτήριο: PSNR),
-            # ώστε κάθε οικογένεια να κρίνεται στο δικό της βέλτιστο.
-            grid_items = [(ref, "Αναφορά"),
-                          (noisy, f"Θορυβώδης — {vspec['short']}\n"
+            # Best parameter per filter family (criterion: PSNR), so that each
+            # family is judged at its own optimum.
+            grid_items = [(ref, "Reference"),
+                          (noisy, f"Noisy — {vspec['short']}\n"
                                   f"PSNR={base['psnr']:.2f} dB · SSIM={base['ssim']:.3f}")]
             for family in ("gaussian", "median", "bilateral"):
                 fam = [r for r in results if r[0]["family"] == family]
@@ -44,14 +44,14 @@ def run():
                                   bm["ssim"], bm["ssim"] - base["ssim"], bsh])
                 grid_items.append((bimg, f"{bspec['short']}\n"
                                          f"PSNR={bm['psnr']:.2f} dB · SSIM={bm['ssim']:.3f}\n"
-                                         f"ευκρίνεια {bsh:.0f}%"))
-                print(f"      {spatial.FAMILY_LABEL[family]:<28s} καλύτερο: {bspec['short']:<22s} "
+                                         f"sharpness {bsh:.0f}%"))
+                print(f"      {spatial.FAMILY_LABEL[family]:<28s} best: {bspec['short']:<22s} "
                       f"PSNR={bm['psnr']:6.2f} ({bm['psnr'] - base['psnr']:+5.2f}) "
-                      f"SSIM={bm['ssim']:.4f} ευκρίνεια={bsh:5.1f}%")
+                      f"SSIM={bm['ssim']:.4f} sharpness={bsh:5.1f}%")
 
             viz.plot_grid(grid_items, out / f"{key}_{vspec['key']}_compare.png",
                           ncols=len(grid_items),
-                          suptitle=f"Χωρικά φίλτρα — {spec['label']} — {vspec['short']}")
+                          suptitle=f"Spatial filters — {spec['label']} — {vspec['short']}")
 
             curves = []
             for family in ("gaussian", "median"):
@@ -61,19 +61,19 @@ def run():
                                [r[2]["psnr"] for r in fam],
                                spatial.FAMILY_LABEL[family]))
             viz.plot_curves(curves, out / f"{key}_{vspec['key']}_psnr_vs_ksize.png",
-                            xlabel="Μέγεθος πυρήνα k (k×k)", ylabel="PSNR (dB)",
-                            title=f"Επίδραση μεγέθους πυρήνα — {spec['label']} — {vspec['short']}",
-                            hlines=[(base["psnr"], "χωρίς φιλτράρισμα")])
+                            xlabel="Kernel size k (k×k)", ylabel="PSNR (dB)",
+                            title=f"Effect of kernel size — {spec['label']} — {vspec['short']}",
+                            hlines=[(base["psnr"], "no filtering")])
 
-    sweep_headers = ["Εικόνα", "Υποβάθμιση", "Φίλτρο", "PSNR πριν", "PSNR μετά",
-                     "ΔPSNR", "SSIM μετά", "ΔSSIM", "Ευκρίνεια (% αναφοράς)"]
+    sweep_headers = ["Image", "Degradation", "Filter", "PSNR before", "PSNR after",
+                     "ΔPSNR", "SSIM after", "ΔSSIM", "Sharpness (% of reference)"]
     tables.save(sweep_headers, sweep_rows, out / "spatial_sweep",
-                title="Πλήρης σάρωση παραμέτρων των χωρικών φίλτρων")
+                title="Full parameter sweep of the spatial filters")
 
-    best_headers = ["Εικόνα", "Υποβάθμιση", "Οικογένεια", "Καλύτερη παράμετρος",
-                    "PSNR πριν", "PSNR μετά", "ΔPSNR", "SSIM μετά", "ΔSSIM",
-                    "Ευκρίνεια (% αναφοράς)"]
+    best_headers = ["Image", "Degradation", "Family", "Best parameter",
+                    "PSNR before", "PSNR after", "ΔPSNR", "SSIM after", "ΔSSIM",
+                    "Sharpness (% of reference)"]
     tables.save(best_headers, best_rows, out / "spatial_best",
-                title="Καλύτερη παράμετρος ανά οικογένεια φίλτρου (κριτήριο: PSNR)")
+                title="Best parameter per filter family (criterion: PSNR)")
     print("\n" + tables.render(best_headers, best_rows))
-    print(f"\n  → αποτελέσματα: {out}")
+    print(f"\n  → results: {out}")

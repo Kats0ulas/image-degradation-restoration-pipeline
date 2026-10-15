@@ -105,11 +105,13 @@ All results (images, plots, `.csv` and `.md` tables) are written to the `results
 one subfolder per stage. The numbers are **the same on every run**, because the noise is
 generated with a fixed seed (`RANDOM_SEED = 631`).
 
-Correctness checks (no extra dependencies):
+Correctness checks (they also run on every push via GitHub Actions):
 
 ```bash
-python tests/test_invariants.py
+python -m pytest
 ```
+
+They run without pytest too: `python tests/test_invariants.py`.
 
 ## Code structure
 

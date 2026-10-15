@@ -1,13 +1,13 @@
 """
-ΣΤΑΔΙΑ 3 & 5 — Πεδίο συχνοτήτων.
+STAGES 3 & 5 — Frequency domain.
 
-Στάδιο 3 (εδώ): ανάλυση. Μετασχηματισμός Fourier, φάσμα πλάτους, ακτινικό
-προφίλ ισχύος και κατανομή ενέργειας ανά συχνότητα.
-Στάδιο 5 (αργότερα): χαμηλοπερατά φίλτρα Butterworth / Gaussian.
+Stage 3 (here): analysis. Fourier transform, magnitude spectrum, radial power
+profile and energy distribution over frequency.
+Stage 5 (further down): Butterworth / Gaussian low-pass filters.
 
-Συμβάσεις: όλα τα φάσματα είναι κεντραρισμένα (fftshift), δηλαδή η DC συνιστώσα
-βρίσκεται στο κέντρο του πίνακα. Οι ακτίνες κανονικοποιούνται στη συχνότητα
-Nyquist: r=0 -> DC, r=1 -> η υψηλότερη συχνότητα κατά τους άξονες.
+Conventions: all spectra are centered (fftshift), i.e. the DC component sits
+at the center of the array. Radii are normalized to the Nyquist frequency:
+r=0 -> DC, r=1 -> the highest frequency along the axes.
 """
 from functools import lru_cache
 
@@ -18,28 +18,28 @@ from .io_utils import to_uint8
 
 
 def fft2c(img) -> np.ndarray:
-    """2D DFT με κεντραρισμένο (fftshift) αποτέλεσμα, σε float64."""
+    """2D DFT with a centered (fftshift) result, in float64."""
     return np.fft.fftshift(np.fft.fft2(np.asarray(img, dtype=np.float64)))
 
 
 def ifft2c(F) -> np.ndarray:
-    """Αντίστροφος του fft2c· επιστρέφει το πραγματικό μέρος (η εικόνα είναι real)."""
+    """Inverse of fft2c; returns the real part (the image is real-valued)."""
     return np.real(np.fft.ifft2(np.fft.ifftshift(F)))
 
 
 def magnitude(F) -> np.ndarray:
-    """Φάσμα πλάτους |F|."""
+    """Magnitude spectrum |F|."""
     return np.abs(F)
 
 
 def power(F) -> np.ndarray:
-    """Φάσμα ισχύος |F|²."""
+    """Power spectrum |F|²."""
     a = np.abs(F)
     return a * a
 
 
 def log_spectrum_image(F) -> np.ndarray:
-    """Φάσμα ως log(1+|F|) σε uint8· χωρίς τον λογάριθμο κυριαρχεί η DC."""
+    """Spectrum as log(1+|F|) in uint8; without the logarithm the DC dominates."""
     s = np.log1p(magnitude(F))
     lo, hi = float(s.min()), float(s.max())
     if hi <= lo:
@@ -50,13 +50,13 @@ def log_spectrum_image(F) -> np.ndarray:
 @lru_cache(maxsize=8)
 def _radius_grid_cached(h: int, w: int) -> np.ndarray:
     """
-    Ο πίνακας ακτίνων για δοσμένες διαστάσεις. Εξαρτάται μόνο από το (h, w),
-    οπότε υπολογίζεται μία φορά και επαναχρησιμοποιείται: σε μια πλήρη εκτέλεση
-    ζητείται εκατοντάδες φορές (φίλτρα, ακτινικά προφίλ, ενέργεια φάσματος).
+    The radius array for given dimensions. It depends only on (h, w), so it is
+    computed once and reused: a full run requests it hundreds of times
+    (filters, radial profiles, spectrum energy).
 
-    Ο πίνακας επιστρέφεται read-only, επειδή τον μοιράζονται όλοι οι καλούντες:
-    έτσι μια μελλοντική κατά λάθος τροποποίηση χτυπάει αμέσως, αντί να αλλοιώσει
-    σιωπηλά τα αποτελέσματα κάθε επόμενης κλήσης.
+    The array is returned read-only because all callers share it: an accidental
+    future modification then fails immediately, instead of silently corrupting
+    the results of every subsequent call.
     """
     v = np.arange(h) - h // 2
     u = np.arange(w) - w // 2
@@ -67,15 +67,15 @@ def _radius_grid_cached(h: int, w: int) -> np.ndarray:
 
 
 def radius_grid(shape) -> np.ndarray:
-    """Απόσταση από το κέντρο (DC), κανονικοποιημένη: r = 1 στο Nyquist."""
+    """Distance from the center (DC), normalized: r = 1 at Nyquist."""
     h, w = shape[:2]
     return _radius_grid_cached(int(h), int(w))
 
 
 def radial_power_profile(F, nbins=128):
     """
-    Μέση ισχύς ανά ακτινικό δακτύλιο -> (κέντρα δακτυλίων, μέση ισχύς). Μέση
-    και όχι άθροισμα, γιατί οι μεγάλες ακτίνες έχουν περισσότερους συντελεστές.
+    Mean power per radial ring -> (ring centers, mean power). Mean rather than
+    sum, because larger radii contain more coefficients.
     """
     p = power(F)
     r = radius_grid(p.shape)
@@ -89,7 +89,7 @@ def radial_power_profile(F, nbins=128):
 
 
 def _drop_dc(p) -> np.ndarray:
-    """Μηδενίζει τη DC: αλλιώς το 90% της ενέργειας πέφτει σε ακτίνα ~0.01."""
+    """Zeroes the DC: otherwise 90% of the energy falls within radius ~0.01."""
     q = np.array(p, dtype=np.float64, copy=True)
     h, w = q.shape[:2]
     q[h // 2, w // 2] = 0.0
@@ -98,8 +98,8 @@ def _drop_dc(p) -> np.ndarray:
 
 def cumulative_energy(F, nbins=512, exclude_dc=True):
     """
-    Ενέργεια του φάσματος εντός ακτίνας r -> (ακτίνες, κλάσμα στο [0,1]).
-    Η DC αγνοείται εξ ορισμού (_drop_dc).
+    Spectrum energy within radius r -> (radii, fraction in [0,1]).
+    The DC is ignored by default (_drop_dc).
     """
     p = _drop_dc(power(F)) if exclude_dc else power(F)
     r = radius_grid(p.shape)
@@ -113,14 +113,14 @@ def cumulative_energy(F, nbins=512, exclude_dc=True):
 
 
 def radius_for_energy(F, fraction, nbins=512, exclude_dc=True) -> float:
-    """Η μικρότερη (κανονικοποιημένη) ακτίνα που περικλείει `fraction` της ενέργειας."""
+    """The smallest (normalized) radius that encloses `fraction` of the energy."""
     radii, cum = cumulative_energy(F, nbins=nbins, exclude_dc=exclude_dc)
     i = int(np.searchsorted(cum, fraction))
     return float(radii[min(i, len(radii) - 1)])
 
 
 def high_freq_energy_ratio(F, r0=None, exclude_dc=True) -> float:
-    """Ποσοστό (%) της ενέργειας (χωρίς DC) που βρίσκεται πέρα από την ακτίνα r0."""
+    """Percentage (%) of the energy (without DC) that lies beyond radius r0."""
     r0 = config.HF_RADIUS_FRAC if r0 is None else r0
     p = _drop_dc(power(F)) if exclude_dc else power(F)
     r = radius_grid(p.shape)
@@ -128,7 +128,7 @@ def high_freq_energy_ratio(F, r0=None, exclude_dc=True) -> float:
 
 
 def spectrum_report(img) -> dict:
-    """Όλα τα ακτινικά μεγέθη μιας εικόνας μαζί."""
+    """All radial quantities of an image together."""
     F = fft2c(img)
     rep = {"hf_pct": high_freq_energy_ratio(F)}
     for lvl in config.ENERGY_LEVELS:
@@ -138,9 +138,9 @@ def spectrum_report(img) -> dict:
 
 def snr_crossover_radius(ref, noisy, nbins=128) -> float:
     """
-    Η ακτίνα όπου η ισχύς του θορύβου ξεπερνά την ισχύ του σήματος (SNR = 1) —
-    η περιοχή τιμών για τη συχνότητα αποκοπής του Σταδίου 5.
-    Επιστρέφει NaN αν το σήμα υπερισχύει παντού.
+    The radius where the noise power exceeds the signal power (SNR = 1) — the
+    value range for the Stage 5 cutoff frequency.
+    Returns NaN if the signal dominates everywhere.
     """
     r, p_sig = radial_power_profile(fft2c(ref), nbins=nbins)
     noise = np.asarray(noisy, dtype=np.float64) - np.asarray(ref, dtype=np.float64)
@@ -149,45 +149,45 @@ def snr_crossover_radius(ref, noisy, nbins=128) -> float:
     return float(r[above[0]]) if above.size else float("nan")
 
 
-# ΣΤΑΔΙΟ 5 — Χαμηλοπερατά φίλτρα
+# STAGE 5 — Low-pass filters
 #
-# Κάθε φίλτρο ορίζεται ως συνάρτηση μεταφοράς H(u,v) που εξαρτάται μόνο από την
-# ακτίνα D. Το D0 δίνεται στην ίδια κανονικοποιημένη κλίμακα με το Στάδιο 3
+# Each filter is defined as a transfer function H(u,v) that depends only on the
+# radius D. D0 is given on the same normalized scale as Stage 3
 # (1 = Nyquist).
 
 def lowpass_ideal(shape, d0) -> np.ndarray:
-    """Ιδανικό χαμηλοπερατό: H = 1 για D ≤ D0, αλλιώς 0."""
+    """Ideal low-pass: H = 1 for D ≤ D0, otherwise 0."""
     return (radius_grid(shape) <= float(d0)).astype(np.float64)
 
 
 def lowpass_butterworth(shape, d0, order=None) -> np.ndarray:
-    """Butterworth: H = 1 / (1 + (D/D0)^(2n)). Στο D0 δίνει πάντα H = 0.5."""
+    """Butterworth: H = 1 / (1 + (D/D0)^(2n)). At D0 it always gives H = 0.5."""
     n = config.BUTTERWORTH_ORDER if order is None else order
     d = radius_grid(shape) / float(d0)
     return 1.0 / (1.0 + d ** (2 * n))
 
 
 def lowpass_gaussian(shape, d0) -> np.ndarray:
-    """Γκαουσιανό: H = exp(-D²/(2·D0²))."""
+    """Gaussian: H = exp(-D²/(2·D0²))."""
     d = radius_grid(shape)
     return np.exp(-(d ** 2) / (2.0 * float(d0) ** 2))
 
 
 def apply_transfer(img, H) -> np.ndarray:
-    """Φιλτράρισμα στο πεδίο συχνοτήτων: G = H·F, μετά αντίστροφος DFT."""
+    """Frequency-domain filtering: G = H·F, then the inverse DFT."""
     F = fft2c(img)
     return to_uint8(ifft2c(F * H))
 
 
 def butterworth_key(n) -> str:
-    """Το κλειδί οικογένειας του Butterworth τάξης n (π.χ. n=2 -> "butterworth_n2")."""
+    """The family key of the order-n Butterworth (e.g. n=2 -> "butterworth_n2")."""
     return f"butterworth_n{n}"
 
 
 def _make_butterworth(n):
     """
-    Κατασκευαστής H(u,v) για σταθερή τάξη n. Ξεχωριστή συνάρτηση και όχι lambda
-    μέσα στον βρόχο, ώστε το n να δεσμεύεται εδώ και όχι τη στιγμή της κλήσης.
+    Builder of H(u,v) for a fixed order n. A separate function rather than a
+    lambda inside the loop, so that n is bound here and not at call time.
     """
     def builder(shape, d0):
         return lowpass_butterworth(shape, d0, order=n)
@@ -196,8 +196,8 @@ def _make_butterworth(n):
     return builder
 
 
-# Κάθε τάξη του Butterworth είναι ξεχωριστή οικογένεια φίλτρων: δικός της
-# πυρήνας, δική της σάρωση συχνότητας αποκοπής, δικά της PSNR/SSIM.
+# Each Butterworth order is a separate filter family: its own kernel, its own
+# cutoff sweep, its own PSNR/SSIM.
 BUTTERWORTH_KEYS = tuple(butterworth_key(n) for n in config.BUTTERWORTH_ORDERS)
 
 LPF_BUILDERS = {"ideal": lowpass_ideal}
@@ -205,23 +205,23 @@ LPF_BUILDERS.update({butterworth_key(n): _make_butterworth(n)
                      for n in config.BUTTERWORTH_ORDERS})
 LPF_BUILDERS["gaussian"] = lowpass_gaussian
 
-LPF_LABEL = {"ideal": "Ιδανικό ΧΠΦ"}
+LPF_LABEL = {"ideal": "Ideal LPF"}
 LPF_LABEL.update({butterworth_key(n): f"Butterworth n={n}"
                   for n in config.BUTTERWORTH_ORDERS})
-LPF_LABEL["gaussian"] = "Γκαουσιανό ΧΠΦ"
+LPF_LABEL["gaussian"] = "Gaussian LPF"
 
-# Η τάξη κάθε οικογένειας (None για όσες δεν είναι Butterworth) — στήλη πίνακα.
+# The order of each family (None for non-Butterworth ones) — a table column.
 LPF_ORDER = {k: getattr(b, "order", None) for k, b in LPF_BUILDERS.items()}
 
 
 def lowpass_many(img, family, cutoffs) -> list:
     """
-    Το ίδιο φίλτρο για πολλές συχνότητες αποκοπής, με ΕΝΑΝ μόνο ευθύ DFT.
+    The same filter for many cutoff frequencies, with only ONE forward DFT.
 
-    Ο ευθύς μετασχηματισμός F δεν εξαρτάται από το D0: αλλάζει μόνο η συνάρτηση
-    μεταφοράς H. Η σάρωση των Σταδίων 5 και 8 δοκιμάζει 9 συχνότητες αποκοπής
-    ανά οικογένεια, οπότε ο υπολογισμός του F μία φορά αντί για εννιά γλιτώνει
-    8 στους 9 ευθείς μετασχηματισμούς, με αριθμητικά ταυτόσημο αποτέλεσμα.
+    The forward transform F does not depend on D0: only the transfer function H
+    changes. The Stage 5 and Stage 8 sweeps try 9 cutoff frequencies per family,
+    so computing F once instead of nine times saves 8 of the 9 forward
+    transforms, with a numerically identical result.
     """
     F = fft2c(img)
     builder = LPF_BUILDERS[family]
@@ -230,12 +230,12 @@ def lowpass_many(img, family, cutoffs) -> list:
 
 
 def lowpass(img, family, d0) -> np.ndarray:
-    """Εφαρμογή χαμηλοπερατού φίλτρου της δοσμένης οικογένειας."""
+    """Applies a low-pass filter of the given family."""
     return lowpass_many(img, family, (d0,))[0]
 
 
 def radial_transfer_profile(H, nbins=128):
-    """Το προφίλ H(D) ως προς την ακτίνα — για το γράφημα των αποκρίσεων."""
+    """The profile H(D) versus radius — for the frequency-response plot."""
     r = radius_grid(H.shape)
     rmax = float(r.max())
     idx = np.clip((r / rmax * nbins).astype(int), 0, nbins - 1)

@@ -1,10 +1,10 @@
 """
-Βοηθητικό εργαλείο (εκτός αλυσίδας): προεπισκόπηση υποψήφιων εικόνων αναφοράς.
+Helper tool (outside the pipeline): preview of candidate reference images.
 
-Τρέξε:  python tools/preview_candidates.py
-Παράγει: results/stage1_reference/candidates.png
+Run:      python tools/preview_candidates.py
+Produces: results/stage1_reference/candidates.png
 
-Αν θέλεις να αλλάξεις τις εικόνες αναφοράς, άλλαξε το config.REFERENCE_IMAGES.
+To change the reference images, edit config.REFERENCE_IMAGES.
 """
 import sys
 from pathlib import Path
@@ -17,15 +17,15 @@ import numpy as np
 from src import config, io_utils, viz
 
 CANDIDATES = [
-    ("camera",  "camera — έντονες ακμές, υφή"),
-    ("moon",    "moon — ομαλοί τόνοι, χαμηλή αντίθεση"),
-    ("astronaut", "astronaut — μικτή (πρόσωπο + λεπτομέρεια)"),
-    ("chelsea", "chelsea — πλούσια υφή (τρίχωμα)"),
-    ("coins",   "coins — ομοιόμορφο φόντο, κυκλικές ακμές"),
-    ("clock",   "clock — ομαλό φόντο, λίγες κοφτές ακμές"),
-    ("brick",   "brick — περιοδική υφή"),
-    ("cell",    "cell — χαμηλή αντίθεση, βιοϊατρική"),
-    ("coffee",  "coffee — ομαλές μεταβάσεις + λεπτομέρεια"),
+    ("camera",  "camera — strong edges, texture"),
+    ("moon",    "moon — smooth tones, low contrast"),
+    ("astronaut", "astronaut — mixed (face + detail)"),
+    ("chelsea", "chelsea — rich texture (fur)"),
+    ("coins",   "coins — uniform background, circular edges"),
+    ("clock",   "clock — smooth background, few sharp edges"),
+    ("brick",   "brick — periodic texture"),
+    ("cell",    "cell — low contrast, biomedical"),
+    ("coffee",  "coffee — smooth transitions + detail"),
 ]
 
 
@@ -41,7 +41,7 @@ def main():
 
     out = config.STAGE_DIRS[1] / "candidates.png"
     viz.plot_grid(items, out, ncols=3, figsize_per=(3.4, 3.9),
-                  suptitle="Υποψήφιες εικόνες αναφοράς (skimage.data)")
+                  suptitle="Candidate reference images (skimage.data)")
     print(f"→ {out}")
 
 

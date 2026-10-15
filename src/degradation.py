@@ -1,13 +1,13 @@
 """
-ΣΤΑΔΙΟ 2 — Τεχνητή υποβάθμιση των εικόνων αναφοράς.
+STAGE 2 — Artificial degradation of the reference images.
 
-Δύο μοντέλα θορύβου:
-  • Προσθετικός Gaussian:  g(x,y) = f(x,y) + n(x,y),  n ~ N(0, σ²)
-  • Κρουστικός Salt-and-Pepper: ποσοστό των pixel γίνεται 0 ή 255
+Two noise models:
+  • Additive Gaussian:  g(x,y) = f(x,y) + n(x,y),  n ~ N(0, σ²)
+  • Impulse Salt-and-Pepper: a fraction of the pixels becomes 0 or 255
 
-Κάθε παραλλαγή παίρνει δική της γεννήτρια τυχαίων αριθμών, σπαρμένη από το
-config.RANDOM_SEED και το όνομα της παραλλαγής, ώστε τα αποτελέσματα να μην
-εξαρτώνται από τη σειρά εκτέλεσης των σταδίων.
+Each variant gets its own random number generator, seeded from
+config.RANDOM_SEED and the variant name, so that the results do not depend on
+the order in which the stages run.
 """
 import numpy as np
 
@@ -16,14 +16,14 @@ from .io_utils import to_uint8
 
 
 def rng_for(*tokens) -> np.random.Generator:
-    """Γεννήτρια με seed από το RANDOM_SEED και το κείμενο των tokens."""
+    """Generator seeded from RANDOM_SEED and the text of the tokens."""
     label = "|".join(str(t) for t in tokens)
     extra = int.from_bytes(label.encode("utf-8"), "little") % (2 ** 32)
     return np.random.default_rng([config.RANDOM_SEED, extra])
 
 
 def add_gaussian_noise(img, sigma, mean=0.0, rng=None) -> np.ndarray:
-    """Προσθετικός Gaussian θόρυβος με τυπική απόκλιση `sigma` σε επίπεδα γκρι."""
+    """Additive Gaussian noise with standard deviation `sigma` in gray levels."""
     rng = rng or np.random.default_rng(config.RANDOM_SEED)
     f = np.asarray(img, dtype=np.float64)
     noise = rng.normal(loc=mean, scale=float(sigma), size=f.shape)
@@ -31,7 +31,7 @@ def add_gaussian_noise(img, sigma, mean=0.0, rng=None) -> np.ndarray:
 
 
 def add_salt_pepper(img, density, salt_ratio=0.5, rng=None) -> np.ndarray:
-    """Κρουστικός θόρυβος: `density` των pixel γίνονται 255 ή 0 (κατά `salt_ratio`)."""
+    """Impulse noise: a `density` fraction of pixels become 255 or 0 (per `salt_ratio`)."""
     rng = rng or np.random.default_rng(config.RANDOM_SEED)
     out = np.asarray(img, dtype=np.uint8).copy()
     r = rng.random(out.shape)
@@ -43,14 +43,14 @@ def add_salt_pepper(img, density, salt_ratio=0.5, rng=None) -> np.ndarray:
 
 
 def variant_specs():
-    """Οι υποβαθμίσεις που εφαρμόζονται σε κάθε εικόνα αναφοράς."""
+    """The degradations applied to each reference image."""
     specs = []
     for s in config.GAUSS_SIGMAS:
         specs.append({
             "key": f"gauss_s{s}",
             "kind": "gaussian",
             "param": float(s),
-            "label": f"Gaussian θόρυβος (σ={s})",
+            "label": f"Gaussian noise (σ={s})",
             "short": f"Gauss σ={s}",
         })
     for d in config.SALT_PEPPER_DENSITIES:
@@ -65,26 +65,26 @@ def variant_specs():
 
 
 def apply_variant(img, spec, image_key="") -> np.ndarray:
-    """Εφαρμόζει μία παραλλαγή υποβάθμισης με αναπαραγώγιμη τυχαιότητα."""
+    """Applies one degradation variant with reproducible randomness."""
     rng = rng_for(image_key, spec["key"])
     if spec["kind"] == "gaussian":
         return add_gaussian_noise(img, spec["param"], rng=rng)
     if spec["kind"] == "salt_pepper":
         return add_salt_pepper(img, spec["param"], rng=rng)
-    raise ValueError(f"Άγνωστος τύπος θορύβου: {spec['kind']}")
+    raise ValueError(f"Unknown noise type: {spec['kind']}")
 
 
 def degrade_all(img, image_key="") -> list:
-    """[(spec, noisy_image), ...] για όλες τις παραλλαγές του σταδίου."""
+    """[(spec, noisy_image), ...] for all variants of the stage."""
     return [(s, apply_variant(img, s, image_key)) for s in variant_specs()]
 
 
 def noise_profile(ref, noisy) -> dict:
     """
-    Μετρήσεις πάνω στη διαφορά noisy - ref:
-      changed_pct : ποσοστό pixel που άλλαξαν τιμή
-      sigma_hat   : τυπική απόκλιση της διαφοράς
-      max_abs     : μέγιστη απόλυτη μεταβολή
+    Measurements on the difference noisy - ref:
+      changed_pct : percentage of pixels whose value changed
+      sigma_hat   : standard deviation of the difference
+      max_abs     : maximum absolute change
     """
     d = np.asarray(noisy, dtype=np.float64) - np.asarray(ref, dtype=np.float64)
     return {

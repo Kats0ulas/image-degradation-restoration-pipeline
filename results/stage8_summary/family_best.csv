@@ -1,65 +1,65 @@
-﻿Εικόνα;Υποβάθμιση;Πεδίο;Οικογένεια;Καλύτερη παράμετρος;PSNR πριν;PSNR μετά;ΔPSNR;SSIM
-Cameraman (έντονες ακμές & υφή);Gauss σ=10;Χωρικό;Gaussian (γραμμικό);Gaussian 3×3;28.22;30.23;2.0044;0.8106
-Cameraman (έντονες ακμές & υφή);Gauss σ=10;Χωρικό;Median (τάξης);Median 3×3;28.22;29.26;1.0326;0.7514
-Cameraman (έντονες ακμές & υφή);Gauss σ=10;Χωρικό;Bilateral (διατήρηση ακμών);Bilateral σc=25, σs=25;28.22;32.09;3.8626;0.8654
-Cameraman (έντονες ακμές & υφή);Gauss σ=10;Συχνοτήτων;Ιδανικό ΧΠΦ;Ιδανικό ΧΠΦ D0=0.75;28.22;29.46;1.2384;0.7032
-Cameraman (έντονες ακμές & υφή);Gauss σ=10;Συχνοτήτων;Butterworth n=1;Butterworth n=1 D0=0.75;28.22;31.10;2.8786;0.7746
-Cameraman (έντονες ακμές & υφή);Gauss σ=10;Συχνοτήτων;Butterworth n=2;Butterworth n=2 D0=0.75;28.22;31.02;2.7934;0.7634
-Cameraman (έντονες ακμές & υφή);Gauss σ=10;Συχνοτήτων;Butterworth n=5;Butterworth n=5 D0=0.75;28.22;30.35;2.1291;0.7394
-Cameraman (έντονες ακμές & υφή);Gauss σ=10;Συχνοτήτων;Γκαουσιανό ΧΠΦ;Γκαουσιανό ΧΠΦ D0=0.6;28.22;31.10;2.8796;0.7835
-Cameraman (έντονες ακμές & υφή);Gauss σ=25;Χωρικό;Gaussian (γραμμικό);Gaussian 5×5;20.58;27.17;6.5975;0.6468
-Cameraman (έντονες ακμές & υφή);Gauss σ=25;Χωρικό;Median (τάξης);Median 5×5;20.58;26.31;5.7343;0.6091
-Cameraman (έντονες ακμές & υφή);Gauss σ=25;Χωρικό;Bilateral (διατήρηση ακμών);Bilateral σc=50, σs=50;20.58;27.86;7.2810;0.6739
-Cameraman (έντονες ακμές & υφή);Gauss σ=25;Συχνοτήτων;Ιδανικό ΧΠΦ;Ιδανικό ΧΠΦ D0=0.3;20.58;25.87;5.2916;0.6009
-Cameraman (έντονες ακμές & υφή);Gauss σ=25;Συχνοτήτων;Butterworth n=1;Butterworth n=1 D0=0.45;20.58;26.84;6.2606;0.5817
-Cameraman (έντονες ακμές & υφή);Gauss σ=25;Συχνοτήτων;Butterworth n=2;Butterworth n=2 D0=0.45;20.58;26.94;6.3578;0.5939
-Cameraman (έντονες ακμές & υφή);Gauss σ=25;Συχνοτήτων;Butterworth n=5;Butterworth n=5 D0=0.45;20.58;26.44;5.8583;0.5679
-Cameraman (έντονες ακμές & υφή);Gauss σ=25;Συχνοτήτων;Γκαουσιανό ΧΠΦ;Γκαουσιανό ΧΠΦ D0=0.3;20.58;26.97;6.3973;0.6522
-Cameraman (έντονες ακμές & υφή);S&P d=2%;Χωρικό;Gaussian (γραμμικό);Gaussian 3×3;21.76;27.64;5.8768;0.7006
-Cameraman (έντονες ακμές & υφή);S&P d=2%;Χωρικό;Median (τάξης);Median 3×3;21.76;30.40;8.6417;0.8669
-Cameraman (έντονες ακμές & υφή);S&P d=2%;Χωρικό;Bilateral (διατήρηση ακμών);Bilateral σc=100, σs=50;21.76;26.45;4.6855;0.6714
-Cameraman (έντονες ακμές & υφή);S&P d=2%;Συχνοτήτων;Ιδανικό ΧΠΦ;Ιδανικό ΧΠΦ D0=0.45;21.76;26.51;4.7524;0.6185
-Cameraman (έντονες ακμές & υφή);S&P d=2%;Συχνοτήτων;Butterworth n=1;Butterworth n=1 D0=0.45;21.76;27.52;5.7630;0.7144
-Cameraman (έντονες ακμές & υφή);S&P d=2%;Συχνοτήτων;Butterworth n=2;Butterworth n=2 D0=0.45;21.76;27.59;5.8325;0.7018
-Cameraman (έντονες ακμές & υφή);S&P d=2%;Συχνοτήτων;Butterworth n=5;Butterworth n=5 D0=0.45;21.76;27.09;5.3302;0.6686
-Cameraman (έντονες ακμές & υφή);S&P d=2%;Συχνοτήτων;Γκαουσιανό ΧΠΦ;Γκαουσιανό ΧΠΦ D0=0.45;21.76;27.47;5.7130;0.7029
-Cameraman (έντονες ακμές & υφή);S&P d=10%;Χωρικό;Gaussian (γραμμικό);Gaussian 7×7;14.75;23.92;9.1653;0.5127
-Cameraman (έντονες ακμές & υφή);S&P d=10%;Χωρικό;Median (τάξης);Median 3×3;14.75;29.58;14.83;0.8579
-Cameraman (έντονες ακμές & υφή);S&P d=10%;Χωρικό;Bilateral (διατήρηση ακμών);Bilateral σc=100, σs=50;14.75;21.45;6.6984;0.3662
-Cameraman (έντονες ακμές & υφή);S&P d=10%;Συχνοτήτων;Ιδανικό ΧΠΦ;Ιδανικό ΧΠΦ D0=0.3;14.75;22.96;8.2072;0.4139
-Cameraman (έντονες ακμές & υφή);S&P d=10%;Συχνοτήτων;Butterworth n=1;Butterworth n=1 D0=0.2;14.75;23.60;8.8475;0.5372
-Cameraman (έντονες ακμές & υφή);S&P d=10%;Συχνοτήτων;Butterworth n=2;Butterworth n=2 D0=0.3;14.75;23.67;8.9132;0.4787
-Cameraman (έντονες ακμές & υφή);S&P d=10%;Συχνοτήτων;Butterworth n=5;Butterworth n=5 D0=0.3;14.75;23.39;8.6379;0.4551
-Cameraman (έντονες ακμές & υφή);S&P d=10%;Συχνοτήτων;Γκαουσιανό ΧΠΦ;Γκαουσιανό ΧΠΦ D0=0.2;14.75;23.75;8.9958;0.5390
-Moon (ομαλές διαβαθμίσεις, χαμηλή αντίθεση);Gauss σ=10;Χωρικό;Gaussian (γραμμικό);Gaussian 7×7;28.12;37.53;9.4097;0.9146
-Moon (ομαλές διαβαθμίσεις, χαμηλή αντίθεση);Gauss σ=10;Χωρικό;Median (τάξης);Median 5×5;28.12;36.39;8.2715;0.8816
-Moon (ομαλές διαβαθμίσεις, χαμηλή αντίθεση);Gauss σ=10;Χωρικό;Bilateral (διατήρηση ακμών);Bilateral σc=25, σs=25;28.12;37.94;9.8202;0.9066
-Moon (ομαλές διαβαθμίσεις, χαμηλή αντίθεση);Gauss σ=10;Συχνοτήτων;Ιδανικό ΧΠΦ;Ιδανικό ΧΠΦ D0=0.3;28.12;36.45;8.3314;0.8791
-Moon (ομαλές διαβαθμίσεις, χαμηλή αντίθεση);Gauss σ=10;Συχνοτήτων;Butterworth n=1;Butterworth n=1 D0=0.2;28.12;37.24;9.1198;0.9185
-Moon (ομαλές διαβαθμίσεις, χαμηλή αντίθεση);Gauss σ=10;Συχνοτήτων;Butterworth n=2;Butterworth n=2 D0=0.3;28.12;37.40;9.2807;0.9056
-Moon (ομαλές διαβαθμίσεις, χαμηλή αντίθεση);Gauss σ=10;Συχνοτήτων;Butterworth n=5;Butterworth n=5 D0=0.3;28.12;37.01;8.8827;0.8964
-Moon (ομαλές διαβαθμίσεις, χαμηλή αντίθεση);Gauss σ=10;Συχνοτήτων;Γκαουσιανό ΧΠΦ;Γκαουσιανό ΧΠΦ D0=0.2;28.12;37.40;9.2759;0.9183
-Moon (ομαλές διαβαθμίσεις, χαμηλή αντίθεση);Gauss σ=25;Χωρικό;Gaussian (γραμμικό);Gaussian 9×9;20.17;33.82;13.64;0.8191
-Moon (ομαλές διαβαθμίσεις, χαμηλή αντίθεση);Gauss σ=25;Χωρικό;Median (τάξης);Median 9×9;20.17;33.52;13.35;0.8354
-Moon (ομαλές διαβαθμίσεις, χαμηλή αντίθεση);Gauss σ=25;Χωρικό;Bilateral (διατήρηση ακμών);Bilateral σc=100, σs=50;20.17;34.00;13.82;0.8229
-Moon (ομαλές διαβαθμίσεις, χαμηλή αντίθεση);Gauss σ=25;Συχνοτήτων;Ιδανικό ΧΠΦ;Ιδανικό ΧΠΦ D0=0.15;20.17;33.62;13.45;0.8544
-Moon (ομαλές διαβαθμίσεις, χαμηλή αντίθεση);Gauss σ=25;Συχνοτήτων;Butterworth n=1;Butterworth n=1 D0=0.15;20.17;34.37;14.20;0.8541
-Moon (ομαλές διαβαθμίσεις, χαμηλή αντίθεση);Gauss σ=25;Συχνοτήτων;Butterworth n=2;Butterworth n=2 D0=0.15;20.17;34.59;14.41;0.8787
-Moon (ομαλές διαβαθμίσεις, χαμηλή αντίθεση);Gauss σ=25;Συχνοτήτων;Butterworth n=5;Butterworth n=5 D0=0.15;20.17;34.16;13.99;0.8716
-Moon (ομαλές διαβαθμίσεις, χαμηλή αντίθεση);Gauss σ=25;Συχνοτήτων;Γκαουσιανό ΧΠΦ;Γκαουσιανό ΧΠΦ D0=0.15;20.17;34.48;14.31;0.8620
-Moon (ομαλές διαβαθμίσεις, χαμηλή αντίθεση);S&P d=2%;Χωρικό;Gaussian (γραμμικό);Gaussian 9×9;22.91;35.37;12.46;0.8732
-Moon (ομαλές διαβαθμίσεις, χαμηλή αντίθεση);S&P d=2%;Χωρικό;Median (τάξης);Median 3×3;22.91;40.42;17.51;0.9643
-Moon (ομαλές διαβαθμίσεις, χαμηλή αντίθεση);S&P d=2%;Χωρικό;Bilateral (διατήρηση ακμών);Bilateral σc=100, σs=50;22.91;36.31;13.40;0.8950
-Moon (ομαλές διαβαθμίσεις, χαμηλή αντίθεση);S&P d=2%;Συχνοτήτων;Ιδανικό ΧΠΦ;Ιδανικό ΧΠΦ D0=0.2;22.91;34.52;11.61;0.8524
-Moon (ομαλές διαβαθμίσεις, χαμηλή αντίθεση);S&P d=2%;Συχνοτήτων;Butterworth n=1;Butterworth n=1 D0=0.15;22.91;35.40;12.49;0.8902
-Moon (ομαλές διαβαθμίσεις, χαμηλή αντίθεση);S&P d=2%;Συχνοτήτων;Butterworth n=2;Butterworth n=2 D0=0.2;22.91;35.44;12.54;0.8822
-Moon (ομαλές διαβαθμίσεις, χαμηλή αντίθεση);S&P d=2%;Συχνοτήτων;Butterworth n=5;Butterworth n=5 D0=0.2;22.91;35.05;12.14;0.8730
-Moon (ομαλές διαβαθμίσεις, χαμηλή αντίθεση);S&P d=2%;Συχνοτήτων;Γκαουσιανό ΧΠΦ;Γκαουσιανό ΧΠΦ D0=0.15;22.91;35.54;12.63;0.8920
-Moon (ομαλές διαβαθμίσεις, χαμηλή αντίθεση);S&P d=10%;Χωρικό;Gaussian (γραμμικό);Gaussian 9×9;15.91;30.28;14.37;0.6846
-Moon (ομαλές διαβαθμίσεις, χαμηλή αντίθεση);S&P d=10%;Χωρικό;Median (τάξης);Median 3×3;15.91;39.72;23.82;0.9646
-Moon (ομαλές διαβαθμίσεις, χαμηλή αντίθεση);S&P d=10%;Χωρικό;Bilateral (διατήρηση ακμών);Bilateral σc=100, σs=50;15.91;29.49;13.59;0.6108
-Moon (ομαλές διαβαθμίσεις, χαμηλή αντίθεση);S&P d=10%;Συχνοτήτων;Ιδανικό ΧΠΦ;Ιδανικό ΧΠΦ D0=0.1;15.91;32.09;16.18;0.8587
-Moon (ομαλές διαβαθμίσεις, χαμηλή αντίθεση);S&P d=10%;Συχνοτήτων;Butterworth n=1;Butterworth n=1 D0=0.1;15.91;32.37;16.46;0.8439
-Moon (ομαλές διαβαθμίσεις, χαμηλή αντίθεση);S&P d=10%;Συχνοτήτων;Butterworth n=2;Butterworth n=2 D0=0.1;15.91;32.67;16.76;0.8724
-Moon (ομαλές διαβαθμίσεις, χαμηλή αντίθεση);S&P d=10%;Συχνοτήτων;Butterworth n=5;Butterworth n=5 D0=0.1;15.91;32.41;16.51;0.8686
-Moon (ομαλές διαβαθμίσεις, χαμηλή αντίθεση);S&P d=10%;Συχνοτήτων;Γκαουσιανό ΧΠΦ;Γκαουσιανό ΧΠΦ D0=0.1;15.91;32.53;16.62;0.8580
+﻿Image;Degradation;Domain;Family;Best parameter;PSNR before;PSNR after;ΔPSNR;SSIM
+Cameraman (strong edges & texture);Gauss σ=10;Spatial;Gaussian (linear);Gaussian 3×3;28.22;30.23;2.0044;0.8106
+Cameraman (strong edges & texture);Gauss σ=10;Spatial;Median (order statistic);Median 3×3;28.22;29.26;1.0326;0.7514
+Cameraman (strong edges & texture);Gauss σ=10;Spatial;Bilateral (edge-preserving);Bilateral σc=25, σs=25;28.22;32.09;3.8626;0.8654
+Cameraman (strong edges & texture);Gauss σ=10;Frequency;Ideal LPF;Ideal LPF D0=0.75;28.22;29.46;1.2384;0.7032
+Cameraman (strong edges & texture);Gauss σ=10;Frequency;Butterworth n=1;Butterworth n=1 D0=0.75;28.22;31.10;2.8786;0.7746
+Cameraman (strong edges & texture);Gauss σ=10;Frequency;Butterworth n=2;Butterworth n=2 D0=0.75;28.22;31.02;2.7934;0.7634
+Cameraman (strong edges & texture);Gauss σ=10;Frequency;Butterworth n=5;Butterworth n=5 D0=0.75;28.22;30.35;2.1291;0.7394
+Cameraman (strong edges & texture);Gauss σ=10;Frequency;Gaussian LPF;Gaussian LPF D0=0.6;28.22;31.10;2.8796;0.7835
+Cameraman (strong edges & texture);Gauss σ=25;Spatial;Gaussian (linear);Gaussian 5×5;20.58;27.17;6.5975;0.6468
+Cameraman (strong edges & texture);Gauss σ=25;Spatial;Median (order statistic);Median 5×5;20.58;26.31;5.7343;0.6091
+Cameraman (strong edges & texture);Gauss σ=25;Spatial;Bilateral (edge-preserving);Bilateral σc=50, σs=50;20.58;27.86;7.2810;0.6739
+Cameraman (strong edges & texture);Gauss σ=25;Frequency;Ideal LPF;Ideal LPF D0=0.3;20.58;25.87;5.2916;0.6009
+Cameraman (strong edges & texture);Gauss σ=25;Frequency;Butterworth n=1;Butterworth n=1 D0=0.45;20.58;26.84;6.2606;0.5817
+Cameraman (strong edges & texture);Gauss σ=25;Frequency;Butterworth n=2;Butterworth n=2 D0=0.45;20.58;26.94;6.3578;0.5939
+Cameraman (strong edges & texture);Gauss σ=25;Frequency;Butterworth n=5;Butterworth n=5 D0=0.45;20.58;26.44;5.8583;0.5679
+Cameraman (strong edges & texture);Gauss σ=25;Frequency;Gaussian LPF;Gaussian LPF D0=0.3;20.58;26.97;6.3973;0.6522
+Cameraman (strong edges & texture);S&P d=2%;Spatial;Gaussian (linear);Gaussian 3×3;21.76;27.64;5.8768;0.7006
+Cameraman (strong edges & texture);S&P d=2%;Spatial;Median (order statistic);Median 3×3;21.76;30.40;8.6417;0.8669
+Cameraman (strong edges & texture);S&P d=2%;Spatial;Bilateral (edge-preserving);Bilateral σc=100, σs=50;21.76;26.45;4.6855;0.6714
+Cameraman (strong edges & texture);S&P d=2%;Frequency;Ideal LPF;Ideal LPF D0=0.45;21.76;26.51;4.7524;0.6185
+Cameraman (strong edges & texture);S&P d=2%;Frequency;Butterworth n=1;Butterworth n=1 D0=0.45;21.76;27.52;5.7630;0.7144
+Cameraman (strong edges & texture);S&P d=2%;Frequency;Butterworth n=2;Butterworth n=2 D0=0.45;21.76;27.59;5.8325;0.7018
+Cameraman (strong edges & texture);S&P d=2%;Frequency;Butterworth n=5;Butterworth n=5 D0=0.45;21.76;27.09;5.3302;0.6686
+Cameraman (strong edges & texture);S&P d=2%;Frequency;Gaussian LPF;Gaussian LPF D0=0.45;21.76;27.47;5.7130;0.7029
+Cameraman (strong edges & texture);S&P d=10%;Spatial;Gaussian (linear);Gaussian 7×7;14.75;23.92;9.1653;0.5127
+Cameraman (strong edges & texture);S&P d=10%;Spatial;Median (order statistic);Median 3×3;14.75;29.58;14.83;0.8579
+Cameraman (strong edges & texture);S&P d=10%;Spatial;Bilateral (edge-preserving);Bilateral σc=100, σs=50;14.75;21.45;6.6984;0.3662
+Cameraman (strong edges & texture);S&P d=10%;Frequency;Ideal LPF;Ideal LPF D0=0.3;14.75;22.96;8.2072;0.4139
+Cameraman (strong edges & texture);S&P d=10%;Frequency;Butterworth n=1;Butterworth n=1 D0=0.2;14.75;23.60;8.8475;0.5372
+Cameraman (strong edges & texture);S&P d=10%;Frequency;Butterworth n=2;Butterworth n=2 D0=0.3;14.75;23.67;8.9132;0.4787
+Cameraman (strong edges & texture);S&P d=10%;Frequency;Butterworth n=5;Butterworth n=5 D0=0.3;14.75;23.39;8.6379;0.4551
+Cameraman (strong edges & texture);S&P d=10%;Frequency;Gaussian LPF;Gaussian LPF D0=0.2;14.75;23.75;8.9958;0.5390
+Moon (smooth gradients, low contrast);Gauss σ=10;Spatial;Gaussian (linear);Gaussian 7×7;28.12;37.53;9.4097;0.9146
+Moon (smooth gradients, low contrast);Gauss σ=10;Spatial;Median (order statistic);Median 5×5;28.12;36.39;8.2715;0.8816
+Moon (smooth gradients, low contrast);Gauss σ=10;Spatial;Bilateral (edge-preserving);Bilateral σc=25, σs=25;28.12;37.94;9.8202;0.9066
+Moon (smooth gradients, low contrast);Gauss σ=10;Frequency;Ideal LPF;Ideal LPF D0=0.3;28.12;36.45;8.3314;0.8791
+Moon (smooth gradients, low contrast);Gauss σ=10;Frequency;Butterworth n=1;Butterworth n=1 D0=0.2;28.12;37.24;9.1198;0.9185
+Moon (smooth gradients, low contrast);Gauss σ=10;Frequency;Butterworth n=2;Butterworth n=2 D0=0.3;28.12;37.40;9.2807;0.9056
+Moon (smooth gradients, low contrast);Gauss σ=10;Frequency;Butterworth n=5;Butterworth n=5 D0=0.3;28.12;37.01;8.8827;0.8964
+Moon (smooth gradients, low contrast);Gauss σ=10;Frequency;Gaussian LPF;Gaussian LPF D0=0.2;28.12;37.40;9.2759;0.9183
+Moon (smooth gradients, low contrast);Gauss σ=25;Spatial;Gaussian (linear);Gaussian 9×9;20.17;33.82;13.64;0.8191
+Moon (smooth gradients, low contrast);Gauss σ=25;Spatial;Median (order statistic);Median 9×9;20.17;33.52;13.35;0.8354
+Moon (smooth gradients, low contrast);Gauss σ=25;Spatial;Bilateral (edge-preserving);Bilateral σc=100, σs=50;20.17;34.00;13.82;0.8229
+Moon (smooth gradients, low contrast);Gauss σ=25;Frequency;Ideal LPF;Ideal LPF D0=0.15;20.17;33.62;13.45;0.8544
+Moon (smooth gradients, low contrast);Gauss σ=25;Frequency;Butterworth n=1;Butterworth n=1 D0=0.15;20.17;34.37;14.20;0.8541
+Moon (smooth gradients, low contrast);Gauss σ=25;Frequency;Butterworth n=2;Butterworth n=2 D0=0.15;20.17;34.59;14.41;0.8787
+Moon (smooth gradients, low contrast);Gauss σ=25;Frequency;Butterworth n=5;Butterworth n=5 D0=0.15;20.17;34.16;13.99;0.8716
+Moon (smooth gradients, low contrast);Gauss σ=25;Frequency;Gaussian LPF;Gaussian LPF D0=0.15;20.17;34.48;14.31;0.8620
+Moon (smooth gradients, low contrast);S&P d=2%;Spatial;Gaussian (linear);Gaussian 9×9;22.91;35.37;12.46;0.8732
+Moon (smooth gradients, low contrast);S&P d=2%;Spatial;Median (order statistic);Median 3×3;22.91;40.42;17.51;0.9643
+Moon (smooth gradients, low contrast);S&P d=2%;Spatial;Bilateral (edge-preserving);Bilateral σc=100, σs=50;22.91;36.31;13.40;0.8950
+Moon (smooth gradients, low contrast);S&P d=2%;Frequency;Ideal LPF;Ideal LPF D0=0.2;22.91;34.52;11.61;0.8524
+Moon (smooth gradients, low contrast);S&P d=2%;Frequency;Butterworth n=1;Butterworth n=1 D0=0.15;22.91;35.40;12.49;0.8902
+Moon (smooth gradients, low contrast);S&P d=2%;Frequency;Butterworth n=2;Butterworth n=2 D0=0.2;22.91;35.44;12.54;0.8822
+Moon (smooth gradients, low contrast);S&P d=2%;Frequency;Butterworth n=5;Butterworth n=5 D0=0.2;22.91;35.05;12.14;0.8730
+Moon (smooth gradients, low contrast);S&P d=2%;Frequency;Gaussian LPF;Gaussian LPF D0=0.15;22.91;35.54;12.63;0.8920
+Moon (smooth gradients, low contrast);S&P d=10%;Spatial;Gaussian (linear);Gaussian 9×9;15.91;30.28;14.37;0.6846
+Moon (smooth gradients, low contrast);S&P d=10%;Spatial;Median (order statistic);Median 3×3;15.91;39.72;23.82;0.9646
+Moon (smooth gradients, low contrast);S&P d=10%;Spatial;Bilateral (edge-preserving);Bilateral σc=100, σs=50;15.91;29.49;13.59;0.6108
+Moon (smooth gradients, low contrast);S&P d=10%;Frequency;Ideal LPF;Ideal LPF D0=0.1;15.91;32.09;16.18;0.8587
+Moon (smooth gradients, low contrast);S&P d=10%;Frequency;Butterworth n=1;Butterworth n=1 D0=0.1;15.91;32.37;16.46;0.8439
+Moon (smooth gradients, low contrast);S&P d=10%;Frequency;Butterworth n=2;Butterworth n=2 D0=0.1;15.91;32.67;16.76;0.8724
+Moon (smooth gradients, low contrast);S&P d=10%;Frequency;Butterworth n=5;Butterworth n=5 D0=0.1;15.91;32.41;16.51;0.8686
+Moon (smooth gradients, low contrast);S&P d=10%;Frequency;Gaussian LPF;Gaussian LPF D0=0.1;15.91;32.53;16.62;0.8580

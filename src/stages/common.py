@@ -1,10 +1,10 @@
-"""Βοηθητικές συναρτήσεις που μοιράζονται περισσότερα από ένα στάδια."""
+"""Helper functions shared by more than one stage."""
 from .. import metrics
 from .. import spatial_filters as spatial
 
 
 def best_spatial_restoration(ref, noisy):
-    """Η καλύτερη αποκατάσταση του Σταδίου 4 για τη συγκεκριμένη υποβάθμιση."""
+    """The best Stage 4 restoration for the given degradation."""
     best = None
     for fspec, filt in spatial.apply_all(noisy):
         m = metrics.evaluate(ref, filt)

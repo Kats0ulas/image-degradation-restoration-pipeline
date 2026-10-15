@@ -1,6 +1,6 @@
 """
-Τα 8 στάδια της αλυσίδας, ένα module ανά στάδιο. Κάθε module εκθέτει μια
-run() που γράφει τα αποτελέσματά του στο results/stageN_.../.
+The 8 stages of the pipeline, one module per stage. Each module exposes a
+run() that writes its results to results/stageN_.../.
 """
 from . import (stage1_reference, stage2_degradation, stage3_fft, stage4_spatial,
                stage5_frequency, stage6_enhancement, stage7_edges, stage8_summary)

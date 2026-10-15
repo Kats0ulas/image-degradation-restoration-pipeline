@@ -1,4 +1,4 @@
-# Εγκατάσταση:  python -m pip install -r requirements.txt
+# Install:  python -m pip install -r requirements.txt
 numpy>=1.26
 opencv-python>=4.9
 matplotlib>=3.8

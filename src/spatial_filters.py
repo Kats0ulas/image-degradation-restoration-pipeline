@@ -1,10 +1,10 @@
 """
-ΣΤΑΔΙΟ 4 — Αποθορυβοποίηση στο ΧΩΡΙΚΟ πεδίο.
+STAGE 4 — Denoising in the SPATIAL domain.
 
-Τρία φίλτρα: Gaussian (γραμμικό, συνέλιξη), Median (μη γραμμικό, φίλτρο τάξης)
-και Bilateral (μη γραμμικό, με διατήρηση ακμών).
+Three filters: Gaussian (linear, convolution), Median (non-linear, order
+statistic filter) and Bilateral (non-linear, edge-preserving).
 
-Όλα δέχονται και επιστρέφουν uint8 [0,255].
+All accept and return uint8 [0,255].
 """
 import cv2
 import numpy as np
@@ -13,33 +13,33 @@ from . import config
 
 
 def gaussian(img, ksize=5, sigma=0):
-    """Συνέλιξη με γκαουσιανό πυρήνα. sigma=0 => υπολογίζεται από το ksize."""
+    """Convolution with a Gaussian kernel. sigma=0 => computed from ksize."""
     return cv2.GaussianBlur(np.asarray(img, dtype=np.uint8), (ksize, ksize), sigma)
 
 
 def median(img, ksize=3):
-    """Φίλτρο διαμέσου σε παράθυρο ksize×ksize (το ksize πρέπει να είναι περιττό)."""
+    """Median filter over a ksize×ksize window (ksize must be odd)."""
     return cv2.medianBlur(np.asarray(img, dtype=np.uint8), ksize)
 
 
 def bilateral(img, d=9, sigma_color=50, sigma_space=50):
-    """Διπλευρικό φίλτρο: εξομάλυνση με διατήρηση ακμών."""
+    """Bilateral filter: edge-preserving smoothing."""
     return cv2.bilateralFilter(np.asarray(img, dtype=np.uint8),
                                d, float(sigma_color), float(sigma_space))
 
 
 def filter_specs():
     """
-    Όλοι οι συνδυασμοί φίλτρου × παραμέτρων. Κάθε spec: key (ονόματα αρχείων),
-    family, short (ετικέτα γραφημάτων), size (δείκτης έντασης εξομάλυνσης).
+    All filter × parameter combinations. Each spec: key (file names),
+    family, short (plot label), size (smoothing strength index).
 
-    ΠΡΟΣΟΧΗ — το "size" ΔΕΝ έχει κοινές μονάδες μεταξύ των οικογενειών:
-      Gaussian / Median : μέγεθος πυρήνα k σε pixel        (3 … 9)
-      Bilateral         : sigmaColor, σε επίπεδα γκρι      (25 … 100)
-    Χρησιμεύει μόνο για ταξινόμηση μέσα στην ίδια οικογένεια και για τον άξονα x
-    του γραφήματος PSNR–k του Σταδίου 4, όπου μπαίνουν μόνο Gaussian και Median.
-    Αν κάποτε προστεθεί το Bilateral στο ίδιο γράφημα, οι δύο κλίμακες θα
-    συγκριθούν σαν να ήταν η ίδια — χρειάζεται ξεχωριστό πεδίο, όχι αυτό.
+    CAUTION — "size" does NOT share units across families:
+      Gaussian / Median : kernel size k in pixels          (3 … 9)
+      Bilateral         : sigmaColor, in gray levels        (25 … 100)
+    It is only used for sorting within the same family and for the x axis of
+    the Stage 4 PSNR–k plot, which contains only Gaussian and Median.
+    If Bilateral is ever added to the same plot, the two scales would be
+    compared as if they were the same — that needs a separate field, not this one.
     """
     specs = []
     for k, s in config.GAUSSIAN_PARAMS:
@@ -58,18 +58,18 @@ def filter_specs():
 
 
 FAMILY_LABEL = {
-    "gaussian": "Gaussian (γραμμικό)",
-    "median": "Median (τάξης)",
-    "bilateral": "Bilateral (διατήρηση ακμών)",
+    "gaussian": "Gaussian (linear)",
+    "median": "Median (order statistic)",
+    "bilateral": "Bilateral (edge-preserving)",
 }
 
 
 def apply_all(img) -> list:
-    """[(spec, filtered_image), ...] για κάθε συνδυασμό φίλτρου/παραμέτρων."""
+    """[(spec, filtered_image), ...] for every filter/parameter combination."""
     return [(s, s["fn"](img)) for s in filter_specs()]
 
 
 def sharpness(img) -> float:
-    """Διασπορά του Λαπλασιανού· συγκρίνεται με την τιμή της εικόνας αναφοράς."""
+    """Variance of the Laplacian; compared with the value of the reference image."""
     lap = cv2.Laplacian(np.asarray(img, dtype=np.uint8), cv2.CV_64F, ksize=3)
     return float(lap.var())

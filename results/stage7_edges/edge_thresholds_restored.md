@@ -1,36 +1,36 @@
-**Ανίχνευση ακμών στην αποκατεστημένη εικόνα: επίδραση της επιλογής παραμέτρων**
+**Edge detection on the restored image: effect of the parameter choice**
 
-| Εικόνα | Υποβάθμιση | Αποκατάσταση | Ανιχνευτής / κατώφλια | Ακμές (%) | Precision | Recall | F1 |
+| Image | Degradation | Restoration | Detector / thresholds | Edges (%) | Precision | Recall | F1 |
 |---|---|---|---|---|---|---|---|
-| Cameraman (έντονες ακμές & υφή) | Gauss σ=10 | Bilateral σc=25, σs=25 | Canny (50, 150) | 5.2437 | 0.9955 | 0.5113 | 0.6756 |
-| Cameraman (έντονες ακμές & υφή) | Gauss σ=10 | Bilateral σc=25, σs=25 | Canny (100, 200) | 3.1612 | 0.9975 | 0.4747 | 0.6432 |
-| Cameraman (έντονες ακμές & υφή) | Gauss σ=10 | Bilateral σc=25, σs=25 | Canny (150, 250) | 2.6188 | 0.9990 | 0.6547 | 0.7910 |
-| Cameraman (έντονες ακμές & υφή) | Gauss σ=10 | Bilateral σc=25, σs=25 | Sobel (ισχυρότερο 8%) | 8.0017 | 0.9902 | 0.9312 | 0.9598 |
-| Cameraman (έντονες ακμές & υφή) | Gauss σ=25 | Bilateral σc=50, σs=50 | Canny (50, 150) | 5.8887 | 0.9539 | 0.5361 | 0.6864 |
-| Cameraman (έντονες ακμές & υφή) | Gauss σ=25 | Bilateral σc=50, σs=50 | Canny (100, 200) | 3.0537 | 0.9865 | 0.4350 | 0.6038 |
-| Cameraman (έντονες ακμές & υφή) | Gauss σ=25 | Bilateral σc=50, σs=50 | Canny (150, 250) | 2.3552 | 0.9934 | 0.5772 | 0.7302 |
-| Cameraman (έντονες ακμές & υφή) | Gauss σ=25 | Bilateral σc=50, σs=50 | Sobel (ισχυρότερο 8%) | 8.0017 | 0.9561 | 0.8882 | 0.9209 |
-| Cameraman (έντονες ακμές & υφή) | S&P d=2% | Median 3×3 | Canny (50, 150) | 6.1535 | 0.9921 | 0.6074 | 0.7535 |
-| Cameraman (έντονες ακμές & υφή) | S&P d=2% | Median 3×3 | Canny (100, 200) | 3.2310 | 0.9954 | 0.4910 | 0.6576 |
-| Cameraman (έντονες ακμές & υφή) | S&P d=2% | Median 3×3 | Canny (150, 250) | 2.5696 | 0.9973 | 0.6376 | 0.7779 |
-| Cameraman (έντονες ακμές & υφή) | S&P d=2% | Median 3×3 | Sobel (ισχυρότερο 8%) | 8.0093 | 0.9836 | 0.9057 | 0.9430 |
-| Cameraman (έντονες ακμές & υφή) | S&P d=10% | Median 3×3 | Canny (50, 150) | 6.8382 | 0.9844 | 0.6566 | 0.7878 |
-| Cameraman (έντονες ακμές & υφή) | S&P d=10% | Median 3×3 | Canny (100, 200) | 3.4595 | 0.9899 | 0.5237 | 0.6850 |
-| Cameraman (έντονες ακμές & υφή) | S&P d=10% | Median 3×3 | Canny (150, 250) | 2.6661 | 0.9917 | 0.6533 | 0.7877 |
-| Cameraman (έντονες ακμές & υφή) | S&P d=10% | Median 3×3 | Sobel (ισχυρότερο 8%) | 8.0006 | 0.9814 | 0.9099 | 0.9443 |
-| Moon (ομαλές διαβαθμίσεις, χαμηλή αντίθεση) | Gauss σ=10 | Bilateral σc=25, σs=25 | Canny (50, 150) | 0.5939 | 0.8870 | 0.5651 | 0.6904 |
-| Moon (ομαλές διαβαθμίσεις, χαμηλή αντίθεση) | Gauss σ=10 | Bilateral σc=25, σs=25 | Canny (100, 200) | 0.2613 | 0.9226 | 0.5825 | 0.7142 |
-| Moon (ομαλές διαβαθμίσεις, χαμηλή αντίθεση) | Gauss σ=10 | Bilateral σc=25, σs=25 | Canny (150, 250) | 0.1614 | 0.9031 | 0.6640 | 0.7653 |
-| Moon (ομαλές διαβαθμίσεις, χαμηλή αντίθεση) | Gauss σ=10 | Bilateral σc=25, σs=25 | Sobel (ισχυρότερο 8%) | 8.0181 | 0.8522 | 0.8577 | 0.8549 |
-| Moon (ομαλές διαβαθμίσεις, χαμηλή αντίθεση) | Gauss σ=25 | Bilateral σc=100, σs=50 | Canny (50, 150) | 0.2338 | 0.9103 | 0.2365 | 0.3754 |
-| Moon (ομαλές διαβαθμίσεις, χαμηλή αντίθεση) | Gauss σ=25 | Bilateral σc=100, σs=50 | Canny (100, 200) | 0.0729 | 0.9476 | 0.1546 | 0.2658 |
-| Moon (ομαλές διαβαθμίσεις, χαμηλή αντίθεση) | Gauss σ=25 | Bilateral σc=100, σs=50 | Canny (150, 250) | 0.0374 | 0.9898 | 0.1568 | 0.2707 |
-| Moon (ομαλές διαβαθμίσεις, χαμηλή αντίθεση) | Gauss σ=25 | Bilateral σc=100, σs=50 | Sobel (ισχυρότερο 8%) | 8.0441 | 0.6543 | 0.7356 | 0.6926 |
-| Moon (ομαλές διαβαθμίσεις, χαμηλή αντίθεση) | S&P d=2% | Median 3×3 | Canny (50, 150) | 0.7950 | 0.9055 | 0.7726 | 0.8338 |
-| Moon (ομαλές διαβαθμίσεις, χαμηλή αντίθεση) | S&P d=2% | Median 3×3 | Canny (100, 200) | 0.3754 | 0.9278 | 0.8148 | 0.8677 |
-| Moon (ομαλές διαβαθμίσεις, χαμηλή αντίθεση) | S&P d=2% | Median 3×3 | Canny (150, 250) | 0.1923 | 0.9782 | 0.8016 | 0.8811 |
-| Moon (ομαλές διαβαθμίσεις, χαμηλή αντίθεση) | S&P d=2% | Median 3×3 | Sobel (ισχυρότερο 8%) | 8.0292 | 0.9658 | 0.9359 | 0.9506 |
-| Moon (ομαλές διαβαθμίσεις, χαμηλή αντίθεση) | S&P d=10% | Median 3×3 | Canny (50, 150) | 0.9594 | 0.8537 | 0.8206 | 0.8368 |
-| Moon (ομαλές διαβαθμίσεις, χαμηλή αντίθεση) | S&P d=10% | Median 3×3 | Canny (100, 200) | 0.4761 | 0.7981 | 0.8472 | 0.8219 |
-| Moon (ομαλές διαβαθμίσεις, χαμηλή αντίθεση) | S&P d=10% | Median 3×3 | Canny (150, 250) | 0.2148 | 0.8188 | 0.7472 | 0.7814 |
-| Moon (ομαλές διαβαθμίσεις, χαμηλή αντίθεση) | S&P d=10% | Median 3×3 | Sobel (ισχυρότερο 8%) | 8.0444 | 0.9623 | 0.9505 | 0.9564 |
+| Cameraman (strong edges & texture) | Gauss σ=10 | Bilateral σc=25, σs=25 | Canny (50, 150) | 5.2437 | 0.9955 | 0.5113 | 0.6756 |
+| Cameraman (strong edges & texture) | Gauss σ=10 | Bilateral σc=25, σs=25 | Canny (100, 200) | 3.1612 | 0.9975 | 0.4747 | 0.6432 |
+| Cameraman (strong edges & texture) | Gauss σ=10 | Bilateral σc=25, σs=25 | Canny (150, 250) | 2.6188 | 0.9990 | 0.6547 | 0.7910 |
+| Cameraman (strong edges & texture) | Gauss σ=10 | Bilateral σc=25, σs=25 | Sobel (strongest 8%) | 8.0017 | 0.9902 | 0.9312 | 0.9598 |
+| Cameraman (strong edges & texture) | Gauss σ=25 | Bilateral σc=50, σs=50 | Canny (50, 150) | 5.8887 | 0.9539 | 0.5361 | 0.6864 |
+| Cameraman (strong edges & texture) | Gauss σ=25 | Bilateral σc=50, σs=50 | Canny (100, 200) | 3.0537 | 0.9865 | 0.4350 | 0.6038 |
+| Cameraman (strong edges & texture) | Gauss σ=25 | Bilateral σc=50, σs=50 | Canny (150, 250) | 2.3552 | 0.9934 | 0.5772 | 0.7302 |
+| Cameraman (strong edges & texture) | Gauss σ=25 | Bilateral σc=50, σs=50 | Sobel (strongest 8%) | 8.0017 | 0.9561 | 0.8882 | 0.9209 |
+| Cameraman (strong edges & texture) | S&P d=2% | Median 3×3 | Canny (50, 150) | 6.1535 | 0.9921 | 0.6074 | 0.7535 |
+| Cameraman (strong edges & texture) | S&P d=2% | Median 3×3 | Canny (100, 200) | 3.2310 | 0.9954 | 0.4910 | 0.6576 |
+| Cameraman (strong edges & texture) | S&P d=2% | Median 3×3 | Canny (150, 250) | 2.5696 | 0.9973 | 0.6376 | 0.7779 |
+| Cameraman (strong edges & texture) | S&P d=2% | Median 3×3 | Sobel (strongest 8%) | 8.0093 | 0.9836 | 0.9057 | 0.9430 |
+| Cameraman (strong edges & texture) | S&P d=10% | Median 3×3 | Canny (50, 150) | 6.8382 | 0.9844 | 0.6566 | 0.7878 |
+| Cameraman (strong edges & texture) | S&P d=10% | Median 3×3 | Canny (100, 200) | 3.4595 | 0.9899 | 0.5237 | 0.6850 |
+| Cameraman (strong edges & texture) | S&P d=10% | Median 3×3 | Canny (150, 250) | 2.6661 | 0.9917 | 0.6533 | 0.7877 |
+| Cameraman (strong edges & texture) | S&P d=10% | Median 3×3 | Sobel (strongest 8%) | 8.0006 | 0.9814 | 0.9099 | 0.9443 |
+| Moon (smooth gradients, low contrast) | Gauss σ=10 | Bilateral σc=25, σs=25 | Canny (50, 150) | 0.5939 | 0.8870 | 0.5651 | 0.6904 |
+| Moon (smooth gradients, low contrast) | Gauss σ=10 | Bilateral σc=25, σs=25 | Canny (100, 200) | 0.2613 | 0.9226 | 0.5825 | 0.7142 |
+| Moon (smooth gradients, low contrast) | Gauss σ=10 | Bilateral σc=25, σs=25 | Canny (150, 250) | 0.1614 | 0.9031 | 0.6640 | 0.7653 |
+| Moon (smooth gradients, low contrast) | Gauss σ=10 | Bilateral σc=25, σs=25 | Sobel (strongest 8%) | 8.0181 | 0.8522 | 0.8577 | 0.8549 |
+| Moon (smooth gradients, low contrast) | Gauss σ=25 | Bilateral σc=100, σs=50 | Canny (50, 150) | 0.2338 | 0.9103 | 0.2365 | 0.3754 |
+| Moon (smooth gradients, low contrast) | Gauss σ=25 | Bilateral σc=100, σs=50 | Canny (100, 200) | 0.0729 | 0.9476 | 0.1546 | 0.2658 |
+| Moon (smooth gradients, low contrast) | Gauss σ=25 | Bilateral σc=100, σs=50 | Canny (150, 250) | 0.0374 | 0.9898 | 0.1568 | 0.2707 |
+| Moon (smooth gradients, low contrast) | Gauss σ=25 | Bilateral σc=100, σs=50 | Sobel (strongest 8%) | 8.0441 | 0.6543 | 0.7356 | 0.6926 |
+| Moon (smooth gradients, low contrast) | S&P d=2% | Median 3×3 | Canny (50, 150) | 0.7950 | 0.9055 | 0.7726 | 0.8338 |
+| Moon (smooth gradients, low contrast) | S&P d=2% | Median 3×3 | Canny (100, 200) | 0.3754 | 0.9278 | 0.8148 | 0.8677 |
+| Moon (smooth gradients, low contrast) | S&P d=2% | Median 3×3 | Canny (150, 250) | 0.1923 | 0.9782 | 0.8016 | 0.8811 |
+| Moon (smooth gradients, low contrast) | S&P d=2% | Median 3×3 | Sobel (strongest 8%) | 8.0292 | 0.9658 | 0.9359 | 0.9506 |
+| Moon (smooth gradients, low contrast) | S&P d=10% | Median 3×3 | Canny (50, 150) | 0.9594 | 0.8537 | 0.8206 | 0.8368 |
+| Moon (smooth gradients, low contrast) | S&P d=10% | Median 3×3 | Canny (100, 200) | 0.4761 | 0.7981 | 0.8472 | 0.8219 |
+| Moon (smooth gradients, low contrast) | S&P d=10% | Median 3×3 | Canny (150, 250) | 0.2148 | 0.8188 | 0.7472 | 0.7814 |
+| Moon (smooth gradients, low contrast) | S&P d=10% | Median 3×3 | Sobel (strongest 8%) | 8.0444 | 0.9623 | 0.9505 | 0.9564 |

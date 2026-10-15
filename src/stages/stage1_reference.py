@@ -1,4 +1,4 @@
-"""ΣΤΑΔΙΟ 1 — Επιλογή και προετοιμασία εικόνων αναφοράς (ground truth)"""
+"""STAGE 1 — Selection and preparation of the reference images (ground truth)"""
 import cv2
 import numpy as np
 
@@ -7,10 +7,10 @@ from .. import config, io_utils, tables, viz
 
 def image_stats(img):
     """
-    Περιγραφικά μέτρα κάθε εικόνας αναφοράς:
-      mean/std : θέση και άπλωμα του ιστογράμματος (αντίθεση)
-      mean|∇|  : μέση ένταση κλίσης (Sobel)
-      edge %   : ποσοστό pixel που ο Canny χαρακτηρίζει ακμή
+    Descriptive measures of each reference image:
+      mean/std : position and spread of the histogram (contrast)
+      mean|∇|  : mean gradient magnitude (Sobel)
+      edge %   : percentage of pixels that Canny classifies as edge
     """
     f = img.astype(np.float64)
     gx = cv2.Sobel(f, cv2.CV_64F, 1, 0, ksize=3)
@@ -28,7 +28,7 @@ def image_stats(img):
 
 
 def run():
-    print("\n=== ΣΤΑΔΙΟ 1: Εικόνες αναφοράς ===")
+    print("\n=== STAGE 1: Reference images ===")
     out = io_utils.ensure_dir(config.STAGE_DIRS[1])
     io_utils.ensure_dir(config.IMAGES_DIR)
 
@@ -51,12 +51,12 @@ def run():
               f"mean|grad|={s['mean_grad']:.1f} edges={s['edge_pct']:.2f}%")
 
     viz.plot_grid(grid_items, out / "references.png", ncols=len(grid_items),
-                  suptitle="Εικόνες αναφοράς (ground truth)")
+                  suptitle="Reference images (ground truth)")
     viz.plot_hist_row(grid_items, out / "references_hist.png",
-                      suptitle="Ιστογράμματα εικόνων αναφοράς")
+                      suptitle="Reference image histograms")
 
-    headers = ["Εικόνα", "Διαστάσεις", "Μέση τιμή", "Τυπ. απόκλιση",
-               "Εύρος", "Μέσο |∇| (Sobel)", "Ακμές Canny (%)"]
-    tables.save(headers, rows, out / "reference_stats", title="Χαρακτηριστικά εικόνων αναφοράς")
+    headers = ["Image", "Dimensions", "Mean", "Std. dev.",
+               "Range", "Mean |∇| (Sobel)", "Canny edges (%)"]
+    tables.save(headers, rows, out / "reference_stats", title="Reference image characteristics")
     print("\n" + tables.render(headers, rows))
-    print(f"\n  → αποτελέσματα: {out}")
+    print(f"\n  → results: {out}")

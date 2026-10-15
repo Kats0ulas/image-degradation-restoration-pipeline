@@ -1,10 +1,10 @@
 """
-Μετρικές ποιότητας ανάμεσα σε μια εικόνα αναφοράς και μια επεξεργασμένη.
+Quality metrics between a reference image and a processed one.
 
-  PSNR : λόγος σήματος προς θόρυβο κορυφής (dB), βασισμένος στο MSE.
-  SSIM : δείκτης δομικής ομοιότητας [0,1] (φωτεινότητα, αντίθεση, δομή).
+  PSNR : peak signal-to-noise ratio (dB), based on the MSE.
+  SSIM : structural similarity index [0,1] (luminance, contrast, structure).
 
-Και οι δύο υπολογίζονται σε uint8 [0,255] (data_range = 255).
+Both are computed on uint8 [0,255] (data_range = 255).
 """
 import numpy as np
 from skimage.metrics import structural_similarity
@@ -13,14 +13,14 @@ from .io_utils import to_uint8
 
 
 def mse(ref, test) -> float:
-    """Μέσο τετραγωνικό σφάλμα σε επίπεδα γκρι."""
+    """Mean squared error in gray levels."""
     a = np.asarray(ref, dtype=np.float64)
     b = np.asarray(test, dtype=np.float64)
     return float(np.mean((a - b) ** 2))
 
 
 def psnr(ref, test, data_range: float = 255.0) -> float:
-    """PSNR σε dB. Επιστρέφει inf όταν οι εικόνες είναι πανομοιότυπες."""
+    """PSNR in dB. Returns inf when the images are identical."""
     e = mse(ref, test)
     if e == 0:
         return float("inf")
@@ -28,10 +28,10 @@ def psnr(ref, test, data_range: float = 255.0) -> float:
 
 
 def ssim(ref, test) -> float:
-    """SSIM με τις προεπιλογές του skimage (ομοιόμορφο παράθυρο 7×7)."""
+    """SSIM with the skimage defaults (uniform 7×7 window)."""
     return float(structural_similarity(to_uint8(ref), to_uint8(test), data_range=255))
 
 
 def evaluate(ref, test) -> dict:
-    """Όλες οι μετρικές μαζί, ως dict."""
+    """All metrics together, as a dict."""
     return {"mse": mse(ref, test), "psnr": psnr(ref, test), "ssim": ssim(ref, test)}

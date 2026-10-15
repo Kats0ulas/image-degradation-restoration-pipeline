@@ -1,8 +1,8 @@
 """
-Δημιουργία πινάκων αποτελεσμάτων σε τρεις μορφές:
-  - εκτύπωση στο τερματικό (ευθυγραμμισμένη)
-  - αρχείο .csv  (για επεξεργασία)
-  - αρχείο .md   (έτοιμο για αντιγραφή στην αναφορά)
+Creation of result tables in three formats:
+  - printed to the terminal (aligned)
+  - .csv file  (for further processing)
+  - .md file   (ready to paste into the report)
 """
 import csv
 from pathlib import Path
@@ -11,7 +11,7 @@ from .io_utils import ensure_dir
 
 
 def _fmt(v):
-    # None = η στήλη δεν έχει νόημα για τη γραμμή· τυπώνεται ως παύλα.
+    # None = the column does not apply to this row; printed as a dash.
     if v is None:
         return "—"
     if isinstance(v, float):
@@ -20,7 +20,7 @@ def _fmt(v):
 
 
 def render(headers, rows) -> str:
-    """Ευθυγραμμισμένος πίνακας ως string (για το τερματικό)."""
+    """Aligned table as a string (for the terminal)."""
     cells = [[_fmt(c) for c in r] for r in rows]
     widths = [max(len(str(h)), *(len(r[i]) for r in cells)) if cells else len(str(h))
               for i, h in enumerate(headers)]
@@ -31,7 +31,7 @@ def render(headers, rows) -> str:
 
 
 def save(headers, rows, path_stem, title=None) -> None:
-    """Αποθηκεύει τον πίνακα ως .csv και .md με βάση το path_stem (χωρίς κατάληξη)."""
+    """Saves the table as .csv and .md based on path_stem (without extension)."""
     stem = Path(path_stem)
     ensure_dir(stem.parent)
 

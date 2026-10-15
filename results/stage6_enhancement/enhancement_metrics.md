@@ -1,18 +1,18 @@
-**Βελτίωση αντίθεσης στις καθαρές εικόνες αναφοράς**
+**Contrast enhancement on the clean reference images**
 
-| Εικόνα | Τεχνική | Μέση τιμή | Τυπ. απόκλιση (αντίθεση) | Εντροπία (bits) | Επίπεδα σε χρήση (%) | SSIM ως προς αναφορά |
+| Image | Technique | Mean | Std. dev. (contrast) | Entropy (bits) | Levels in use (%) | SSIM vs reference |
 |---|---|---|---|---|---|---|
-| Cameraman (έντονες ακμές & υφή) | Αναφορά (χωρίς επεξεργασία) | 129.06 | 73.64 | 7.2317 | 100.00 | 1.0000 |
-| Cameraman (έντονες ακμές & υφή) | Γραμμική διάταση | 140.98 | 82.89 | 7.1764 | 88.67 | 0.9772 |
-| Cameraman (έντονες ακμές & υφή) | Ισοστάθμιση (HE) | 128.60 | 73.67 | 6.9447 | 55.86 | 0.8587 |
-| Cameraman (έντονες ακμές & υφή) | CLAHE clip=2, 8×8 | 132.75 | 67.64 | 7.6870 | 99.61 | 0.8344 |
-| Cameraman (έντονες ακμές & υφή) | CLAHE clip=3, 8×8 | 133.26 | 66.76 | 7.7362 | 99.61 | 0.7533 |
-| Cameraman (έντονες ακμές & υφή) | CLAHE clip=4, 8×8 | 133.32 | 66.30 | 7.7817 | 100.00 | 0.6924 |
-| Cameraman (έντονες ακμές & υφή) | CLAHE clip=2, 16×16 | 136.10 | 70.90 | 7.6347 | 99.61 | 0.8251 |
-| Moon (ομαλές διαβαθμίσεις, χαμηλή αντίθεση) | Αναφορά (χωρίς επεξεργασία) | 112.17 | 13.33 | 4.8850 | 69.53 | 1.0000 |
-| Moon (ομαλές διαβαθμίσεις, χαμηλή αντίθεση) | Γραμμική διάταση | 166.47 | 31.06 | 4.7765 | 31.25 | 0.7573 |
-| Moon (ομαλές διαβαθμίσεις, χαμηλή αντίθεση) | Ισοστάθμιση (HE) | 133.76 | 74.01 | 4.7190 | 19.14 | 0.2480 |
-| Moon (ομαλές διαβαθμίσεις, χαμηλή αντίθεση) | CLAHE clip=2, 8×8 | 119.94 | 18.53 | 5.8265 | 96.09 | 0.8765 |
-| Moon (ομαλές διαβαθμίσεις, χαμηλή αντίθεση) | CLAHE clip=3, 8×8 | 121.95 | 21.27 | 6.1366 | 96.88 | 0.7896 |
-| Moon (ομαλές διαβαθμίσεις, χαμηλή αντίθεση) | CLAHE clip=4, 8×8 | 122.85 | 23.68 | 6.3698 | 97.66 | 0.7091 |
-| Moon (ομαλές διαβαθμίσεις, χαμηλή αντίθεση) | CLAHE clip=2, 16×16 | 124.35 | 16.92 | 5.6206 | 98.44 | 0.8696 |
+| Cameraman (strong edges & texture) | Reference (unprocessed) | 129.06 | 73.64 | 7.2317 | 100.00 | 1.0000 |
+| Cameraman (strong edges & texture) | Linear stretch | 140.98 | 82.89 | 7.1764 | 88.67 | 0.9772 |
+| Cameraman (strong edges & texture) | Equalization (HE) | 128.60 | 73.67 | 6.9447 | 55.86 | 0.8587 |
+| Cameraman (strong edges & texture) | CLAHE clip=2, 8×8 | 132.75 | 67.64 | 7.6870 | 99.61 | 0.8344 |
+| Cameraman (strong edges & texture) | CLAHE clip=3, 8×8 | 133.26 | 66.76 | 7.7362 | 99.61 | 0.7533 |
+| Cameraman (strong edges & texture) | CLAHE clip=4, 8×8 | 133.32 | 66.30 | 7.7817 | 100.00 | 0.6924 |
+| Cameraman (strong edges & texture) | CLAHE clip=2, 16×16 | 136.10 | 70.90 | 7.6347 | 99.61 | 0.8251 |
+| Moon (smooth gradients, low contrast) | Reference (unprocessed) | 112.17 | 13.33 | 4.8850 | 69.53 | 1.0000 |
+| Moon (smooth gradients, low contrast) | Linear stretch | 166.47 | 31.06 | 4.7765 | 31.25 | 0.7573 |
+| Moon (smooth gradients, low contrast) | Equalization (HE) | 133.76 | 74.01 | 4.7190 | 19.14 | 0.2480 |
+| Moon (smooth gradients, low contrast) | CLAHE clip=2, 8×8 | 119.94 | 18.53 | 5.8265 | 96.09 | 0.8765 |
+| Moon (smooth gradients, low contrast) | CLAHE clip=3, 8×8 | 121.95 | 21.27 | 6.1366 | 96.88 | 0.7896 |
+| Moon (smooth gradients, low contrast) | CLAHE clip=4, 8×8 | 122.85 | 23.68 | 6.3698 | 97.66 | 0.7091 |
+| Moon (smooth gradients, low contrast) | CLAHE clip=2, 16×16 | 124.35 | 16.92 | 5.6206 | 98.44 | 0.8696 |
