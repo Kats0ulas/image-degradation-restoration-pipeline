@@ -162,3 +162,7 @@ results/                    all results, per stage
   therefore PSNR/SSIM) is reproducible and independent of the order in which stages run.
 
 </details>
+
+## License
+
+[MIT](LICENSE)
