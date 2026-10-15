@@ -114,9 +114,11 @@ python tests/test_invariants.py
 ## Code structure
 
 ```
-main.py                     runs the stages in order
+main.py                     command line: picks which stages to run
 requirements.txt
 src/
+  stages/                   one module per stage (stage1_reference.py … stage8_summary.py),
+                            each with a run() that writes results/stageN_.../
   config.py                 all experiment parameters in one place
   io_utils.py               loading / converting / saving images
   degradation.py            Stage 2: Gaussian & Salt-and-Pepper noise
@@ -147,7 +149,7 @@ results/                    all results, per stage
 | 5. Butterworth (**≥2 orders n**) & Gaussian LPF, kernels + PSNR/SSIM | `src/frequency_filters.py` | `results/stage5_frequency/` |
 | 6. HE + CLAHE (≥2 clipLimit) **on the denoised images** + histograms before/after | `src/enhancement.py` | `results/stage6_enhancement/` |
 | 7. Sobel (horizontal/vertical/combined) & Canny (≥2 thresholds) **on the restored image** | `src/edges.py` | `results/stage7_edges/` |
-| 8. Summary table of PSNR/SSIM per step | `run_stage8()` | `results/stage8_summary/pipeline_summary.csv` |
+| 8. Summary table of PSNR/SSIM per step | `src/stages/stage8_summary.py` | `results/stage8_summary/pipeline_summary.csv` |
 
 </details>
 
